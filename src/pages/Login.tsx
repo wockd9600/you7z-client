@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import KakaoButton from "../components/Buttons/ActionButtons/KakaoButton";
 
-export default function Login() {
+const Login = () => {
     const layout: CSSProperties = {
         display: "flex",
         flexDirection: "column",
@@ -16,12 +16,12 @@ export default function Login() {
     };
 
     const code = new URL(window.location.href).searchParams.get("code");
-    
+
     if (code) {
         // (server) kakao login
         return null;
     }
-    
+
     return (
         <div>
             <div style={layout}>
@@ -30,4 +30,6 @@ export default function Login() {
             </div>
         </div>
     );
-}
+};
+
+export default Login;
