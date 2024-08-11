@@ -1,8 +1,7 @@
 // 더보기
 import { CSSProperties, useState } from "react";
 
-import CreateRoomButton from "components/Buttons/ActionButtons/CreateRoomButton";
-import { CreatePlayListButton, EnterRoomButton, PlayListButton } from "components/Buttons/ModalButtons";
+import { CreatePlayListButton, EnterRoomButton, PlayListButton, CreateRoomButton } from "components/Buttons/index";
 import DropdownMenu from "../components/DropdownMenu";
 
 import { DropdownOption } from "constants/enums";

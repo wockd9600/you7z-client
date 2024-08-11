@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import KakaoButton from "../components/Buttons/ActionButtons/KakaoButton";
+import KakaoButton from "../components/Buttons/KakaoButton";
 
 const Login = () => {
     const layout: CSSProperties = {

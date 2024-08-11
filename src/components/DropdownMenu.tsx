@@ -47,28 +47,32 @@ const Dropdown: React.FC<DropdownProps> = ({ options }) => {
                 <Icon name="setting" onClick={toggleDropdown} />
             </div>
             {isOpen && (
-                <ul
-                    style={{
-                        position: "absolute",
-                        top: "100%",
-                        left: 0,
-                        width: "150px",
-                        padding: 0,
-                        margin: 0,
-                        listStyleType: "none",
-                        backgroundColor: "#fff",
-                        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.15)",
-                        zIndex: 1000,
-                    }}
-                >
-                    {options.map((option, index) => (
-                        <li key={index} style={{ padding: "10px", cursor: "pointer" }} onClick={() => handleOptionClick(option)}>
-                            {liName[option]}
-                        </li>
-                    ))}
-                </ul>
+                <article>
+                    <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0, 0, 0, 0)", display: "flex", justifyContent: "center", alignItems: "center", cursor: "auto" }} onClick={toggleDropdown}></div>
+
+                    <ul
+                        style={{
+                            position: "absolute",
+                            top: "100%",
+                            left: 0,
+                            width: "150px",
+                            padding: 0,
+                            margin: 0,
+                            listStyleType: "none",
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.15)",
+                            zIndex: 1000,
+                        }}
+                    >
+                        {options.map((option, index) => (
+                            <li key={index} style={{ padding: "10px", cursor: "pointer" }} onClick={() => handleOptionClick(option)}>
+                                {liName[option]}
+                            </li>
+                        ))}
+                    </ul>
+                </article>
             )}
-            <article>{isSetNameModalOpen ? <SetNameModal isOpen={isSetNameModalOpen} onClose={closeSetNameModal} /> : null}</article>
+            <article>{isSetNameModalOpen && <SetNameModal isOpen={isSetNameModalOpen} onClose={closeSetNameModal} />}</article>
         </div>
     );
 };

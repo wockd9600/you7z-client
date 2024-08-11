@@ -1,5 +1,7 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import Modal from "../Common/Modal";
+
+import styles from "./InputTypeModal.module.css";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
@@ -7,47 +9,29 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
-    const divStyle = {
-        marginTop: 10,
-    };
-    const inputStyle: CSSProperties = {
-        width: 200,
-        height: 30,
-        marginRight: 10,
-        fontSize: 16,
-    };
-
-    const buttonStyle: CSSProperties = {
-        height: 30,
-        fontSize: 16,
-    };
-
-    const messageStyle: CSSProperties = {
-        margin: 0,
-        marginTop: 4,
-        fontSize: 16,
-        color: "#009000",
-        textAlign: "center",
-    };
-
     const isMessage = false;
-    let message = '변경 완료';
+    let message = "변경 완료";
+    let userName = "ㅇㅇ";
 
     const setName = () => {
         //*server
         console.log("set name");
     };
 
-    const userName = 'ㅇㅇ'
+    const changeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // 검증
+        userName = e.target.value;
+        console.log(e.target.value);
+    };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <div style={divStyle}>
-                <input type="text" style={inputStyle} value={userName}/>
-                <button type="button" style={buttonStyle} onClick={setName}>
+        <Modal isOpen={isOpen} onClose={onClose} isFull={false}>
+            <div>
+                <input type="text" className={styles.inputStyle} onChange={changeInputValue} placeholder={userName} />
+                <button type="button" className={styles.buttonStyle} onClick={setName}>
                     변경
                 </button>
-                {isMessage ? <p style={messageStyle}>{message}</p> : null}
+                {isMessage && <p className={styles.messageStyle}>{message}</p>}
             </div>
         </Modal>
     );
