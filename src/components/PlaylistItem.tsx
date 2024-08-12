@@ -1,4 +1,4 @@
-import styles from "./Modals/BoardTypeModal.module.css";
+import styles from "./Modals/css/BoardTypeModal.module.css";
 
 interface PlaylistItemProps {
     id: number;

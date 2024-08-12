@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "../Common/Modal";
 
-import styles from "./BoardTypeModal.module.css";
+import styles from "./css/BoardTypeModal.module.css";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;

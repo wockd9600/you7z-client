@@ -4,7 +4,7 @@ import Button from "components/Common/Button";
 import PageButton from "components/Buttons/PageButton";
 import Modal from "../Common/Modal";
 
-import styles from "./BoardTypeModal.module.css";
+import styles from "./css/BoardTypeModal.module.css";
 import AddedSongsModal from "./AddedSongsModal";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
