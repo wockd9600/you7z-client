@@ -4,11 +4,12 @@ import styles from "./button.module.css";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    style?: { width?: string, height?: string };
 }
 
-const Button = ({ text, onClick }: ButtonProps) => {
+const Button = ({ text, onClick, style }: ButtonProps) => {
     return (
-        <button className={styles.button} onClick={onClick}>
+        <button className={styles.button} style={style} onClick={onClick}>
             {text}
         </button>
     );

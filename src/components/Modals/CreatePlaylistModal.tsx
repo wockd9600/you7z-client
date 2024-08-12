@@ -5,6 +5,7 @@ import PageButton from "components/Buttons/PageButton";
 import Modal from "../Common/Modal";
 
 import styles from "./BoardTypeModal.module.css";
+import AddedSongsModal from "./AddedSongsModal";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
@@ -28,6 +29,7 @@ const CreatePlaylistModal = ({ isOpen, onClose }: SetNameModalProps) => {
 
     // let playlist = [];
     const [page, setPage] = useState(-1);
+    const [addedSongsModalOpen, setAddedSongsModalOpen] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
 
     const setSongInputValue = useCallback(
@@ -83,20 +85,40 @@ const CreatePlaylistModal = ({ isOpen, onClose }: SetNameModalProps) => {
         const newSong = getSong();
         resetSongForm();
         setSongs([...songs, newSong]);
-        console.log(page, songs.length)
         setPage(songs.length + 1);
     };
 
+    const handleDeleteSong = () => {
+        resetSongForm();
+        const newSongs = songs.filter((item, index) => index !== page);
+        setSongs([...newSongs]);
+        setPage(songs.length - 1);
+    };
+
     const createPlaylist = () => {
+        if (songs.length < 5) {
+            alert("노래는 최소 5개 이상이어야 합니다.");
+        }
         console.log(songs);
     };
 
+    const clickButton = () => {
+        setAddedSongsModalOpen(true);
+    };
+
+    const closeAddedSongsModal = () => setAddedSongsModalOpen(false);
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
+            <div className={styles.createPlaylistButtonContainer}>
+                <Button text="목록" className={styles.createPlaylistButton} style={{ width: "50px", height: "100%" }} onClick={clickButton}></Button>
+                <Button text="만들기" className={styles.createPlaylistButton} style={{ width: "60px", height: "100%" }} onClick={createPlaylist}></Button>
+            </div>
             <article className={styles.pageButton}>
                 {page > -1 && <PageButton direction="&lt;" onClick={() => handlePageChange(page - 1)} />}
                 {songs.length !== 0 && page < songs.length && <PageButton direction="&gt;" onClick={() => handlePageChange(page + 1)} />}
             </article>
+            {addedSongsModalOpen && <AddedSongsModal isOpen={addedSongsModalOpen} onClose={closeAddedSongsModal} songs={songs} />}
             {page === -1 && (
                 <div>
                     <div className={styles.marginTop}>
@@ -132,7 +154,7 @@ const CreatePlaylistModal = ({ isOpen, onClose }: SetNameModalProps) => {
                     </div>
                     <div className={styles.marginTop} style={{ display: "flex", justifyContent: "space-around" }}>
                         <Button text="노래 추가" onClick={handleAddSong}></Button>
-                        <Button text="만들기" onClick={createPlaylist}></Button>
+                        <Button text="노래 삭제" onClick={handleDeleteSong}></Button>
                     </div>
                 </div>
             )}
