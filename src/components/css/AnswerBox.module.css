@@ -1,0 +1,50 @@
+.answerListContainer {
+    width: 100%;
+    min-height: 200px;
+    height: 100%;
+    padding: 15px;
+    padding-bottom: 60px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: start;
+}
+
+.answerListBox {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    max-height: 100%;
+    overflow-y: scroll;
+}
+
+.answers {
+    text-align: left;
+}
+
+.answer {
+    margin-top: 5px;
+}
+
+.answerName {
+    font-weight: 700;
+    background-color: unset !important;
+}
+
+.answerInputContainer {
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.AnswerInput {
+    width: 100%;
+    margin-right: 8px;
+    font-size: 16px;
+}

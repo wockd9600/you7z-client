@@ -9,12 +9,12 @@ const EnterRoomButton = () => {
     const clickButton = () => {
         setInputCodeModalOpen(true);
     };
-    
+
     const closeSetNameModal = () => setInputCodeModalOpen(false);
 
     return (
         <article>
-            <Button text="코드입력" onClick={clickButton} />
+            <Button text="코드입력" onClick={clickButton} style={{ marginBottom: "16px" }} />
             <article>{isInputCodeModalOpen && <InputCodeModal isOpen={isInputCodeModalOpen} onClose={closeSetNameModal} />}</article>
         </article>
     );

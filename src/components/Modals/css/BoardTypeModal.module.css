@@ -84,6 +84,10 @@
     text-align: center;
 }
 
+.score {
+    width: 20%;
+}
+
 .pageButton {
     display: flex;
     justify-content: space-around;

@@ -1,3 +1,6 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+
 function KakaoButton() {
     const button = {
         height: "36px",
@@ -5,8 +8,8 @@ function KakaoButton() {
     };
 
     const kakaoLogin = function () {
-        const REST_API_KEY = "0cfbf0d886ba5383f9d0b4462f8ac4ab";
-        const REDIRECT_URI = "http://localhost:3000";
+        const REST_API_KEY = process.env.REST_API_KEY;
+        const REDIRECT_URI = process.env.REDIRECT_URI;
         const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
         window.location.href = kakaoURL;

@@ -4,7 +4,7 @@ import styles from "./button.module.css";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
-    style?: { width?: string, height?: string };
+    style?: { width?: string, height?: string, fontSize?: string, marginBottom?: string };
 }
 
 const Button = ({ text, onClick, style }: ButtonProps) => {

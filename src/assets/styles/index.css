@@ -40,3 +40,38 @@ button:disabled {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.user-color1 {
+    background-color: #f40404;
+    color: #f40404;
+}
+
+.user-color2 {
+    background-color: #0c48cc;
+    color: #0c48cc;
+}
+
+.user-color3 {
+    background-color: #2cb494;
+    color: #2cb494;
+}
+
+.user-color4 {
+    background-color: #88409c;
+    color: #88409c;
+}
+
+.user-color5 {
+    background-color: #f88c14;
+    color: #f88c14;
+}
+
+.user-color6 {
+    background-color: #703014;
+    color: #703014;
+}
+
+.user-color7 {
+    background-color: #088008;
+    color: #088008;
+}

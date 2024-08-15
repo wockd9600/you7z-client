@@ -1,0 +1,99 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    justify-content: space-between;
+}
+
+.userPanelContainer {
+    width: 60%;
+    padding: 10px 15px;
+}
+
+.userRow {
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+}
+
+.userRow > li + li {
+    margin-left: 8px;
+}
+
+.userRow + .userRow {
+    margin-top: 5px;
+}
+
+.userColor {
+    width: 20px;
+    height: 20px;
+    /* background-color: #f0f0f0; */
+}
+
+.settingsPanelContainer {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding: 10px 5px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setingBox {
+    width: 100%;
+    height: fit-content;
+    padding: 15px 4px;
+    font-size: 14px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+}
+
+.setingBoxManager {
+    cursor: pointer;
+}
+
+.setingBox li + li {
+    margin-top: 10px;
+}
+
+.musicContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+.iconContainer {
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+.vibration {
+    position: absolute;
+    top: 60%;
+    left: 55%;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.3);
+    /* border: 1px solid rgba(0, 0, 0, 0.3);; */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.6);
+        opacity: 0;
+    }
+}

@@ -18,7 +18,7 @@ const CreateRoomButton = () => {
         navigate('/910503');
     };
 
-    return <Button text="방만들기" onClick={clickButton} />;
+    return <Button text="방만들기" onClick={clickButton} style={{marginBottom: "16px"}} />;
 };
 
 export default CreateRoomButton;

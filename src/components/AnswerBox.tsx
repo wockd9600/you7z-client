@@ -1,11 +1,17 @@
+import { CSSProperties } from "react";
+
 import AnswerList from "./AnswerList";
-import AnswerInput from "./AnswerInput";
 
 const AnswerBox = () => {
+    const container: CSSProperties = {
+        position: "relative",
+        height: "100%",
+        flex: 1,
+        overflow: "auto",
+    };
     return (
-        <article>
+        <article style={container}>
             <AnswerList />
-            <AnswerInput />
         </article>
     );
 };

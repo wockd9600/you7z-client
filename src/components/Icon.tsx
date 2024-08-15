@@ -1,12 +1,14 @@
 import React from "react";
 import { ReactComponent as SettingIcon } from "../assets/icons/setting.svg";
+import { ReactComponent as MusicIcon } from "../assets/icons/music.svg";
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
-    name: "setting";
+    name: "setting" | "music";
 }
 
 const icons = {
     setting: SettingIcon,
+    music: MusicIcon,
 };
 
 const Icon: React.FC<IconProps> = ({ name, ...props }) => {
