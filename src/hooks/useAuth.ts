@@ -22,14 +22,14 @@ export const useAuth = () => {
 
     const logout = async () => {
         try {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            localStorage.removeItem("nickname");
-
-            dispatch(logoutRedux());
             await logoutUser();
         } catch (error) {
             console.log(error);
+        } finally {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("nickname");
+            dispatch(logoutRedux());
         }
     };
 
