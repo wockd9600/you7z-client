@@ -1,7 +1,10 @@
 import React, { CSSProperties, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Icon from "./Icon";
 import SetNameModal from "./Modals/SetNameModal";
 
+import { useAuth } from "../hooks/useAuth";
 import { DropdownOption } from "constants/enums";
 
 interface DropdownProps {
@@ -24,6 +27,9 @@ const Dropdown: React.FC<DropdownProps> = ({ options }) => {
         justifyContent: "right",
     };
 
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isSetNameModalOpen, setSetNameModalOpen] = useState(false);
 
@@ -33,18 +39,20 @@ const Dropdown: React.FC<DropdownProps> = ({ options }) => {
 
     const closeSetNameModal = () => setSetNameModalOpen(false);
 
+    //* 내가 만든 플레이리스트, 내다 담은 플레이리스트 보기
     const handleOptionClick = (option: DropdownOption): void => {
         switch (option) {
             case DropdownOption.SET_NAME:
                 setSetNameModalOpen(true);
                 break;
             case DropdownOption.LOGOUT:
-                // *server
-                console.log("logout");
+                logout();
+                setTimeout(() => navigate("/"), 0);
                 break;
             default:
                 console.log("Unknown option selected");
         }
+
         setIsOpen(false);
     };
 

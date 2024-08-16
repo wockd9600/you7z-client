@@ -5,20 +5,20 @@ import Button from "../Common/Button";
 const CreateRoomButton = () => {
     const navigate = useNavigate();
 
-    const isCreate = true;
-
     const clickButton = () => {
-        if (!isCreate) {
+        // *수정
+        // *server create room
+        // 서버에서 체크
+        const d = true
+        if (!d) {
             // alert
             return alert("저장한 플레이리스가 없습니다.");
         }
-        // *수정
-        // *server create room
-        
-        navigate('/910503');
+
+        navigate("/910503");
     };
 
-    return <Button text="방만들기" onClick={clickButton} style={{marginBottom: "16px"}} />;
+    return <Button text="방만들기" onClick={clickButton} style={{ marginBottom: "16px" }} />;
 };
 
 export default CreateRoomButton;
