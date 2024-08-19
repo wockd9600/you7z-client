@@ -24,6 +24,8 @@
     border-radius: 5px;
     position: relative;
     text-align: start;
+    max-height: 80%;
+    overflow: scroll;
 }
 
 .closeButton {

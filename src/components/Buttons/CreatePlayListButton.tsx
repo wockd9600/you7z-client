@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 import Button from "../Common/Button";
-import CreatePlaylistModal from "../Modals/CreatePlaylistModal";
+import CreatePlaylistModal from "../Modals/CreatePlaylistModal/CreatePlaylistModal";
 
 const CreateRoomButton = () => {
     const [isInputCodeModalOpen, setInputCodeModalOpen] = useState(false);

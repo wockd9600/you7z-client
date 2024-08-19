@@ -6,9 +6,10 @@ interface ModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     onClose: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
     children: React.ReactNode;
     isFull?: boolean;
+    zIndex?: number;
 }
 
-const Modal = ({ isOpen, onClose, children, isFull = true }: ModalProps) => {
+const Modal = ({ isOpen, onClose, children, isFull = true, zIndex }: ModalProps) => {
     useEffect(() => {
         // ESC 키를 감지하는 함수
         const handleEsc = (e: KeyboardEvent) => {
@@ -29,7 +30,7 @@ const Modal = ({ isOpen, onClose, children, isFull = true }: ModalProps) => {
     if (!isOpen) return null;
 
     return (
-        <div className={styles.modalOverlay} onClick={onClose}>
+        <div className={styles.modalOverlay} onClick={onClose} style={{ zIndex }}>
             <div className={`${styles.modalContent} ${isFull ? styles.modalContentIsFull : ""}`} onClick={(e) => e.stopPropagation()}>
                 <button className={styles.closeButton} onClick={onClose}>
                     &times;

@@ -1,7 +1,9 @@
 import React from "react";
-import Modal from "../Common/Modal";
+import Modal from "../../Common/Modal";
 
-import styles from "./css/BoardTypeModal.module.css";
+import styles from "../css/BoardTypeModal.module.css";
+
+import { Song } from "types";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
@@ -9,17 +11,10 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
     songs: Song[];
 }
 
-interface Song {
-    youtubeLink: string;
-    startTime: string;
-    answer: string;
-    description?: string;
-}
-
 const AddedSongsModal = ({ isOpen, onClose, songs }: SetNameModalProps) => {
     console.log(songs);
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} zIndex={10}>
             <div className={styles.container}>
                 <article className={styles.table} style={{ width: "100%" }}>
                     <ul className={styles.column} style={{ width: "100%" }}>
