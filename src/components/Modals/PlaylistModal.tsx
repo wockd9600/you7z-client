@@ -1,43 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Modal from "../Common/Modal";
 import PlaylistItem from "components/PlaylistItem";
 import PageButton from "components/Buttons/PageButton";
 
+import { usePlaylist } from "../../hooks/usePlaylist";
+
 import styles from "./css/BoardTypeModal.module.css";
+
+import { PlaylistModalType } from "constants/enums";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
     onClose: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
+    modalType: number;
 }
 
-const PlaylistModal = ({ isOpen, onClose }: SetNameModalProps) => {
-    let playlist = [];
-    playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
-    playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
-    playlist.push({ rank: 2, id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", savedUsersCount: 4, downloaded: false });
-    playlist.push({ rank: 3, id: 4, title: "최악의 노래 모음", savedUsersCount: 4, downloaded: false });
-    playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
-    playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
-    playlist.push({ rank: 2, id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", savedUsersCount: 4, downloaded: false });
-    playlist.push({ rank: 3, id: 4, title: "최악의 노래 모음", savedUsersCount: 4, downloaded: false });
-    playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
-    playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
-    // 쿠기에 저장해놓자
+const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
+    const { playlists, setPlaylists, storePlaylist, popularPlaylists } = usePlaylist();
+
+    // playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
+    // playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
+    // playlist.push({ rank: 2, id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", savedUsersCount: 4, downloaded: false });
+    // playlist.push({ rank: 3, id: 4, title: "최악의 노래 모음", savedUsersCount: 4, downloaded: false });
+    // playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
+    // playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
+    // playlist.push({ rank: 2, id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", savedUsersCount: 4, downloaded: false });
+    // playlist.push({ rank: 3, id: 4, title: "최악의 노래 모음", savedUsersCount: 4, downloaded: false });
+    // playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
+    // playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        if ((modalType = PlaylistModalType.POPULAR)) {
+            popularPlaylists(page);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page]);
 
     const [value, setValue] = useState("");
 
     const searchPlaylist = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             console.log("Input value:", value);
-            playlist = [];
+            setPlaylists([]);
             setTimeout(() => {
                 setValue("");
             }, 0);
         }
     };
-
-    const [page, setPage] = useState(0);
 
     const nextPage = () => {
         changePage(page + 1);
@@ -63,8 +74,8 @@ const PlaylistModal = ({ isOpen, onClose }: SetNameModalProps) => {
                         <li className={styles.title}>제목</li>
                         <li className={styles.download}>점수</li>
                     </ul>
-                    {playlist.map((item, index) => (
-                        <PlaylistItem key={index} rank={item.rank} id={item.id} title={item.title} savedUsersCount={item.savedUsersCount} downloaded={item.downloaded} />
+                    {playlists.map((item, index) => (
+                        <PlaylistItem key={index} rank={index} id={item.id} title={item.title} score={item.score} downloaded={item.downloaded} storePlaylist={storePlaylist} />
                     ))}
                 </article>
                 <article className={styles.pageButton}>
