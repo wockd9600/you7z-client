@@ -5,15 +5,12 @@ import Icon from "./Icon";
 import SetNameModal from "./Modals/SetNameModal";
 
 import { useAuth } from "../hooks/useAuth";
-import { DropdownOption } from "constants/enums";
+import { DropdownOption, PlaylistModalType } from "constants/enums";
+import PlaylistModal from "./Modals/PlaylistModal";
 
-interface DropdownProps {
-    options: number[];
-}
+const liName = ["이름변경", "내 노래모음", "만든 노래모음", "로그아웃"];
 
-const liName = ["이름변경", "로그아웃"];
-
-const Dropdown: React.FC<DropdownProps> = ({ options }) => {
+const Dropdown = () => {
     const dropdownContainer: CSSProperties = {
         position: "absolute",
         top: "8px",
@@ -27,23 +24,39 @@ const Dropdown: React.FC<DropdownProps> = ({ options }) => {
         justifyContent: "right",
     };
 
+    const options: number[] = Array(4)
+        .fill(0)
+        .map((_, i) => i);
+
     const navigate = useNavigate();
     const { logout } = useAuth();
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isSetNameModalOpen, setSetNameModalOpen] = useState(false);
 
+    const [playlistModalType, setModalType] = useState(0);
+    const [isPlaylistModalOpen, setPlaylistModalOpen] = useState(false);
+
     const toggleDropdown = (): void => {
         setIsOpen(!isOpen);
     };
 
     const closeSetNameModal = () => setSetNameModalOpen(false);
+    const closePlaylistModal = () => setPlaylistModalOpen(false);
 
     //* 내가 만든 플레이리스트, 내다 담은 플레이리스트 보기
     const handleOptionClick = (option: DropdownOption): void => {
         switch (option) {
             case DropdownOption.SET_NAME:
                 setSetNameModalOpen(true);
+                break;
+            case DropdownOption.MY_PLAYLIST:
+                setModalType(PlaylistModalType.MY);
+                setPlaylistModalOpen(true);
+                break;
+            case DropdownOption.CREATE_PLAYLIST:
+                setModalType(PlaylistModalType.CREATED);
+                setPlaylistModalOpen(true);
                 break;
             case DropdownOption.LOGOUT:
                 logout();
@@ -89,6 +102,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options }) => {
                     </article>
                 )}
                 <article>{isSetNameModalOpen && <SetNameModal isOpen={isSetNameModalOpen} onClose={closeSetNameModal} />}</article>
+                <article>{isPlaylistModalOpen && <PlaylistModal isOpen={isPlaylistModalOpen} onClose={closePlaylistModal} modalType={playlistModalType} />}</article>
             </div>
         </article>
     );

@@ -8,8 +8,6 @@ import { usePlaylist } from "../../hooks/usePlaylist";
 
 import styles from "./css/BoardTypeModal.module.css";
 
-import { PlaylistModalType } from "constants/enums";
-
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
     onClose: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
@@ -17,24 +15,22 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
-    const { playlists, setPlaylists, storePlaylist, popularPlaylists } = usePlaylist();
+    const { playlists, getPlaylists, setPlaylists, storePlaylist, cancelStorePlaylist } = usePlaylist();
 
-    // playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
-    // playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
-    // playlist.push({ rank: 2, id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", savedUsersCount: 4, downloaded: false });
-    // playlist.push({ rank: 3, id: 4, title: "최악의 노래 모음", savedUsersCount: 4, downloaded: false });
-    // playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
-    // playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
-    // playlist.push({ rank: 2, id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", savedUsersCount: 4, downloaded: false });
-    // playlist.push({ rank: 3, id: 4, title: "최악의 노래 모음", savedUsersCount: 4, downloaded: false });
-    // playlist.push({ rank: 0, id: 1, title: "2024 노래 모음", savedUsersCount: 8, downloaded: false });
-    // playlist.push({ rank: 1, id: 2, title: "추억의 애니 노래", savedUsersCount: 1, downloaded: true });
     const [page, setPage] = useState(1);
+    // playlists.push({ id: 1, title: "2024 노래 모음", score: 8, description: "", downloaded: false });
+    // playlists.push({ id: 2, title: "추억의 애니 노래", score: 1, description: "", downloaded: true });
+    // playlists.push({ id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", score: 4, description: "", downloaded: false });
+    // playlists.push({ id: 4, title: "최악의 노래 모음", score: 4, description: "", downloaded: false });
+    // playlists.push({ id: 1, title: "2024 노래 모음", score: 8, description: "", downloaded: false });
+    // playlists.push({ id: 2, title: "추억의 애니 노래", score: 1, description: "", downloaded: true });
+    // playlists.push({ id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", score: 4, description: "", downloaded: false });
+    // playlists.push({ id: 4, title: "최악의 노래 모음", score: 4, description: "", downloaded: false });
+    // playlists.push({ id: 1, title: "2024 노래 모음", score: 8, description: "", downloaded: false });
+    // playlists.push({ id: 2, title: "추억의 애니 노래", score: 1, description: "", downloaded: true });
 
     useEffect(() => {
-        if ((modalType = PlaylistModalType.POPULAR)) {
-            popularPlaylists(page);
-        }
+        getPlaylists(page, modalType);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 
@@ -74,9 +70,7 @@ const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
                         <li className={styles.title}>제목</li>
                         <li className={styles.download}>점수</li>
                     </ul>
-                    {playlists.map((item, index) => (
-                        <PlaylistItem key={index} rank={index} id={item.id} title={item.title} score={item.score} downloaded={item.downloaded} storePlaylist={storePlaylist} />
-                    ))}
+                    {playlists && playlists.map((item, index) => <PlaylistItem key={index} rank={index} type={modalType} item={item} storePlaylist={storePlaylist} cancelStorePlaylist={cancelStorePlaylist} />)}
                 </article>
                 <article className={styles.pageButton}>
                     <PageButton direction="&lt;" onClick={previousPage} />

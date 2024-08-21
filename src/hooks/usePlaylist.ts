@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { getPopularPlaylists, postStorePlaylist } from "../services/playlistService";
+import { getPopularPlaylists, postStorePlaylist, deleteStorePlaylist } from "../services/playlistService";
 import { Playlist } from "types";
 
 export const usePlaylist = () => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
-    const popularPlaylists = async (page: number) => {
+    const getPlaylists = async (page: number, type: number) => {
         try {
-            const { playlists } = await getPopularPlaylists(page);
+            const { playlists } = await getPopularPlaylists(page, type);
             setPlaylists(playlists);
         } catch (error) {
             console.log(error);
@@ -22,5 +22,16 @@ export const usePlaylist = () => {
         }
     };
 
-    return { playlists, setPlaylists, storePlaylist, popularPlaylists };
+    const cancelStorePlaylist = async (id: number) => {
+        try {
+            await deleteStorePlaylist(id);
+            const newPlaylist = playlists.filter((playlist) => playlist.id !== id);
+            setPlaylists(newPlaylist);
+            console.log(newPlaylist)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    return { playlists, getPlaylists, setPlaylists, storePlaylist, cancelStorePlaylist };
 };
