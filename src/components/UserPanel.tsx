@@ -1,20 +1,17 @@
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+
 import styles from "./css/GameBox.module.css";
 
 const UserPanel = () => {
-    const isManager = true;
-    const users = [
-        { name: "안녕하세요 저예요", score: 0 },
-        { name: "그렇습니까?", score: 0 },
-        { name: "우치하 김동현", score: 0 },
-        { name: "가낟라마바사", score: 0 },
-        { name: "박딴딴", score: 0 },
-        { name: "박딴딴", score: 0 },
-        { name: "박딴딴", score: 0 },
-    ];
+    const users = useSelector((state: RootState) => state.game.users);
 
-    const kickUser = () => {
+    const isManager = true;
+
+    const kickUser = (id: number) => {
         //kick user
-    }
+        console.log("kick", id);
+    };
 
     return (
         <article className={styles.userPanelContainer}>
@@ -22,9 +19,13 @@ const UserPanel = () => {
                 return (
                     <ul key={index} className={styles.userRow}>
                         <li className={`${styles.userColor} user-color${index + 1}`}></li>
-                        <li>{item.name}</li>
+                        <li>{item.nickname}</li>
                         <li>{item.score}</li>
-                        {isManager && <li onClick={kickUser} style={{ color: "red", cursor: "pointer" }}>x</li>}
+                        {isManager && (
+                            <li onClick={() => kickUser(item.userId)} style={{ color: "red", cursor: "pointer" }}>
+                                x
+                            </li>
+                        )}
                     </ul>
                 );
             })}

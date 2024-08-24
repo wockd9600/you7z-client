@@ -1,12 +1,10 @@
 import { CSSProperties, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
 
 import KakaoButton from "../components/Buttons/KakaoButton";
 
 const Login = () => {
-    const navigate = useNavigate();
     const { login } = useAuth();
 
     const layout: CSSProperties = {
@@ -24,20 +22,8 @@ const Login = () => {
 
     useEffect(() => {
         const code = new URL(window.location.href).searchParams.get("code");
-
-        const handleLogin = async () => {
-            if (code) {
-                try {
-                    await login(code);
-                    navigate("/");
-                } catch (error) {
-                    console.error("Login failed");
-                }
-            }
-        };
-
-        handleLogin();
-    }, [login, navigate]);
+        if (code) login(code);
+    }, [login]);
 
     return (
         <div>

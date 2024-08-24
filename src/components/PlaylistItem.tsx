@@ -2,14 +2,10 @@ import { useState } from "react";
 import styles from "./Modals/css/BoardTypeModal.module.css";
 
 import { PlaylistModalType } from "constants/enums";
+import { Playlist } from "types";
 
 interface PlaylistItemProps {
-    item: {
-        id: number;
-        title: string;
-        score: number;
-        downloaded?: boolean;
-    };
+    item: Playlist,
     type: number;
     rank: number;
     storePlaylist: (id: number) => void;
@@ -17,7 +13,7 @@ interface PlaylistItemProps {
 }
 
 const PlaylistItem = ({ item, rank, type, storePlaylist, cancelStorePlaylist }: PlaylistItemProps) => {
-    const { id, title, score } = item;
+    const { id, title, score, length } = item;
 
     const [count, setCount] = useState(score);
     const [stored, setStored] = useState(item.downloaded ? item.downloaded : false);
@@ -33,15 +29,14 @@ const PlaylistItem = ({ item, rank, type, storePlaylist, cancelStorePlaylist }: 
         handleSave();
     };
 
-    const clickButtonCancelStore = async () => {
-        await cancelStorePlaylist(id);
-    };
+    const clickButtonCancelStore = () => cancelStorePlaylist(id);
 
     return (
         <ul className={styles.row}>
             <li className={styles.rank}>{rank + 1}</li>
             <li className={`${styles.title} ellipsis`}>{title}</li>
-            <li className={styles.download}>{count}</li>
+            <li className={styles.download}>{length}</li>
+            {/* <li className={styles.download}>{count}</li> */}
             {type === PlaylistModalType.POPULAR && <li>{stored ? <button disabled>담음</button> : <button onClick={clickButtonStore}>담기</button>}</li>}
             {type === PlaylistModalType.MY && (
                 <li>

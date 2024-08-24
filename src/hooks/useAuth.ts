@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
 import { login as loginRedux, logout as logoutRedux } from "../redux/userSlice";
 import { loginUser, logoutUser } from "../services/authService";
 
 export const useAuth = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const login = async (code: string) => {
@@ -15,8 +18,9 @@ export const useAuth = () => {
             localStorage.setItem("nickname", nickname);
 
             dispatch(loginRedux({ name: nickname }));
+            navigate("/");
         } catch (error) {
-            throw error;
+            console.log(error);
         }
     };
 

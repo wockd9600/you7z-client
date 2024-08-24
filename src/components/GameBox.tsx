@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+
 import SettingsPanel from "./SettingsPanel";
 import UserPanel from "./UserPanel";
 import ScoreBoardModal from "components/Modals/ScoreBoardModal";
@@ -6,11 +9,13 @@ import ScoreBoardModal from "components/Modals/ScoreBoardModal";
 import styles from "./css/GameBox.module.css";
 import Icon from "./Icon";
 import Button from "./Common/Button";
+import { GameStatus } from "constants/enums";
 
 const GameBox = () => {
     const [isScoreBoardModalOpen, setScoreBoardModalOpen] = useState(false);
+
+    const roomStatus = useSelector((state: RootState) => state.game.status);
     let gameFinish = true;
-    let gameStart = false;
 
     const clickButton = () => {
         setScoreBoardModalOpen(true);
@@ -23,7 +28,7 @@ const GameBox = () => {
             <article className={styles.container}>
                 <UserPanel />
 
-                {!gameStart ? (
+                {roomStatus === GameStatus.NOT_STARTED ? (
                     <SettingsPanel />
                 ) : (
                     <article className={`${styles.settingsPanelContainer} ${styles.musicContainer}`}>

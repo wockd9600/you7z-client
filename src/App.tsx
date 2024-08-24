@@ -53,7 +53,7 @@ function App() {
         <div className="App">
             <Routes>
                 <Route path="/" element={isLogin ? <Home /> : <Login />} />
-                <Route path="/:room_code" element={<Game />} />
+                <Route path="/:roomCode" element={<Game />} />
             </Routes>
         </div>
     );

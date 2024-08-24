@@ -68,7 +68,8 @@ const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
                     <ul className={styles.column} style={{ width: "100%" }}>
                         <li className={styles.rank}>순위</li>
                         <li className={styles.title}>제목</li>
-                        <li className={styles.download}>점수</li>
+                        <li className={styles.download}>곡</li>
+                        {/* <li className={styles.download}>점수</li> */}
                     </ul>
                     {playlists && playlists.map((item, index) => <PlaylistItem key={index} rank={index} type={modalType} item={item} storePlaylist={storePlaylist} cancelStorePlaylist={cancelStorePlaylist} />)}
                 </article>

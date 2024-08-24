@@ -16,5 +16,6 @@ export interface Playlist {
     title: string;
     description: string;
     score: number;
+    length: number;
     downloaded: boolean;
 }
