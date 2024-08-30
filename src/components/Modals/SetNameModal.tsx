@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 
+import SocketService from "utils/socket";
+
 import { useUser } from "../../hooks/useUser";
 
 import Modal from "../Common/Modal";
@@ -15,18 +17,25 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 
 const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const { updateName } = useUser();
-    const name = useSelector((state: RootState) => state.user.name);
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const [isMessage, setIsMessage] = useState(false);
     const [isMessageValue, setIsMessageValue] = useState("변경 완료");
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const name = useSelector((state: RootState) => state.user.name);
+    const { roomCode } = useSelector((state: RootState) => state.game);
 
     const handleSetName = async () => {
         if (inputRef.current && inputRef.current.value.trim()) {
             try {
-                await updateName(inputRef.current.value);
+                const name = inputRef.current.value;
+
+                await updateName(name);
                 setIsMessage(true);
+                if (roomCode) {
+                    SocketService.socketEmit("change user name", { name });
+                }
+
                 inputRef.current.value = "";
             } catch (error) {
                 if (error instanceof Error) setIsMessageValue(error.message);

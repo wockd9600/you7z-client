@@ -21,7 +21,8 @@ function App() {
 
         if (accessToken && refreshToken) {
             const name = localStorage.getItem("nickname");
-            if (name) dispatch(login({ name }));
+            const userId = localStorage.getItem("userId");
+            if (name && userId) dispatch(login({ name, userId: parseInt(userId) }));
         }
     }, [dispatch]);
 

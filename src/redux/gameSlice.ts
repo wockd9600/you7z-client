@@ -7,19 +7,28 @@ export interface GameUser {
     order: number;
     nickname: string;
     score: number;
+    isReady?: boolean;
+}
+
+// User 타입 정의
+export interface GameSong {
+    id: number;
+    url: string;
+    startTime: string;
+    description: string;
 }
 
 // ChatMessage 타입 정의
 export interface GameAnswer {
     id: number;
+    isAlert?: boolean;
     userId: number;
-    nickname: string;
     message: string;
 }
 
 export interface GameSetting {
     playlist: string;
-    gameType: string;
+    // gameType: number;
     targetScore: number;
 }
 
@@ -27,18 +36,27 @@ export interface GameSetting {
 export interface GameState {
     status: number;
     roomCode: string;
+    managerId: number;
     gameSetting: GameSetting;
     users: GameUser[];
     answers: GameAnswer[];
+    songs: GameSong[];
+    songIndex: 0 | 1;
 }
 
 // Initial state for the game
 const initialState: GameState = {
     status: 0,
     roomCode: "",
-    gameSetting: { playlist: "", gameType: "", targetScore: 0 },
+    managerId: -1,
+    gameSetting: { playlist: "", /* gameType: 0, */ targetScore: 0 },
     users: [],
     answers: [],
+    songs: [
+        { id: -1, url: "", startTime: "", description: "" },
+        { id: -1, url: "", startTime: "", description: "" },
+    ],
+    songIndex: 0,
 };
 
 export const gameSlice = createSlice({
@@ -51,17 +69,47 @@ export const gameSlice = createSlice({
         setRoomCode: (state, action: PayloadAction<string>) => {
             state.roomCode = action.payload;
         },
+        setManagerId: (state, action: PayloadAction<number>) => {
+            state.managerId = action.payload;
+        },
         setPlaylist: (state, action: PayloadAction<string>) => {
             state.gameSetting.playlist = action.payload;
         },
-        setGameType: (state, action: PayloadAction<string>) => {
-            state.gameSetting.gameType = action.payload;
-        },
+        // setGameType: (state, action: PayloadAction<number>) => {
+        //     state.gameSetting.gameType = action.payload;
+        // },
         setTargetScore: (state, action: PayloadAction<number>) => {
             state.gameSetting.targetScore = action.payload;
         },
+        setGameSongs: (state, action: PayloadAction<GameSong>) => {
+            state.songs[state.songIndex] = action.payload;
+        },
+        setGameSongIndex: (state) => {
+            state.songIndex = state.songIndex === 1 ? 0 : 1;
+        },
+        setAnswers: (state, action: PayloadAction<GameAnswer[]>) => {
+            state.answers = action.payload;
+        },
+        setGameState: (state, action: PayloadAction<GameState>) => {
+            return action.payload;
+        },
+        resetGameState: () => {
+            return initialState;
+        },
+
         addUser: (state, action: PayloadAction<Omit<GameUser, "score">>) => {
-            state.users.push({ ...action.payload, score: 0 });
+            state.users = [...state.users, { ...action.payload, score: 0 }];
+        },
+        addAnswerMessage: (state, action: PayloadAction<GameAnswer>) => {
+            state.answers.push(action.payload);
+        },
+
+        updateUserName: (state, action: PayloadAction<{ userId: number; name: string }>) => {
+            const { userId, name } = action.payload;
+            const user = state.users.find((u) => u.userId === userId);
+            if (user) {
+                user.nickname = name;
+            }
         },
         updateUserScore: (state, action: PayloadAction<{ userId: number; score: number }>) => {
             const user = state.users.find((u) => u.userId === action.payload.userId);
@@ -69,19 +117,21 @@ export const gameSlice = createSlice({
                 user.score = action.payload.score;
             }
         },
+        updateUserIsReady: (state, action: PayloadAction<{ userId: number; isReady: boolean }>) => {
+            const { userId, isReady } = action.payload;
+            const user = state.users.find((u) => u.userId === userId);
+            if (user) {
+                user.isReady = isReady;
+            }
+        },
+
         removeUser: (state, action: PayloadAction<number>) => {
             state.users = state.users.filter((u) => u.userId !== action.payload);
-        },
-        addAnswerMessage: (state, action: PayloadAction<GameAnswer>) => {
-            state.answers.push(action.payload);
-        },
-        setGameState: (state, action: PayloadAction<GameState>) => {
-            return action.payload;
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatus, setRoomCode, setPlaylist, setGameType, setTargetScore, addUser, updateUserScore, removeUser, addAnswerMessage, setGameState } = gameSlice.actions;
+export const { setStatus, setRoomCode, setPlaylist, /* setGameType, */ setGameSongs, setGameSongIndex, setTargetScore, setAnswers, addUser, updateUserName, updateUserScore, updateUserIsReady, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -48,3 +48,7 @@
     margin-right: 8px;
     font-size: 16px;
 }
+
+.alert-color {
+    color: rgb(0, 115, 197);
+}

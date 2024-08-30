@@ -1,45 +1,57 @@
+import { useMemo, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+
 import styles from "./css/AnswerBox.module.css";
 
 const AnswerList = () => {
-    const answers = [
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴsadjflkasjdflkdjsakfjslf딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-        { order: 1, name: "안녕하세요 저예요", answer: "???" },
-        { order: 2, name: "그렇습니까?", answer: "따나ㄸㄴ딴단" },
-    ];
+    const scrollBoxRef = useRef<HTMLDivElement>(null);
+    const { users, answers } = useSelector((state: RootState) => state.game);
+
+    const enrichedAnswers = useMemo(() => {
+        const userMap = new Map(users.map((user, index) => [user.userId, { ...user, index }]));
+
+        return answers.map((answer) => {
+            const matchingUser = userMap.get(answer.userId);
+            console.log(answer);
+            let index = 0;
+            let nickname = "나간 유저";
+
+            if (matchingUser) {
+                nickname = matchingUser.nickname;
+                index = matchingUser.index + 1;
+            }
+
+            return {
+                ...answer,
+                index,
+                nickname,
+            };
+        });
+    }, [users, answers]);
+
+    useEffect(() => {
+        if (scrollBoxRef.current) {
+            scrollBoxRef.current.scrollTop = scrollBoxRef.current.scrollHeight;
+        }
+    }, [enrichedAnswers]);
+
     return (
         <article className={styles.answerListContainer}>
-            <div className={styles.answerListBox}>
+            <div className={styles.answerListBox} ref={scrollBoxRef}>
                 <div className={styles.answers}>
-                    {answers.map((item, index) => {
-                        return (
-                            <p key={index} className={styles.answer}>
-                                <span className={`${styles.answerName} user-color${item.order}`}>{item.name}</span> : {item.answer}
-                            </p>
-                        );
-                    })}
+                    {enrichedAnswers &&
+                        enrichedAnswers.map((item, index) => {
+                            return item.isAlert ? (
+                                <p key={index} className={`${styles.answer} alert-color`}>
+                                    {item.message}
+                                </p>
+                            ) : (
+                                <p key={index} className={styles.answer}>
+                                    <span className={`${styles.answerName} user-color${item.index}`}>{item.nickname}</span> : {item.message}
+                                </p>
+                            );
+                        })}
                 </div>
             </div>
         </article>

@@ -1,4 +1,4 @@
-import axios from "./axios";
+import axios from "../utils/axios";
 import { Song } from "types";
 
 export const checkYoutubeLink = async (url: string) => {

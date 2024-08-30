@@ -41,6 +41,11 @@ button:disabled {
     text-overflow: ellipsis;
 }
 
+.user-color0 {
+    background-color: #8e8e8e;
+    color: #8e8e8e;
+}
+
 .user-color1 {
     background-color: #f40404;
     color: #f40404;

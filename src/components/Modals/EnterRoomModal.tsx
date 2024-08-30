@@ -9,7 +9,7 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
     onClose: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
 }
 
-const InputCodeModal = ({ isOpen, onClose }: SetNameModalProps) => {
+const EnterRoomModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const { enterGameRoom } = useJoinGameRoom();
     const roomCodeRef = useRef<HTMLInputElement>(null);
 
@@ -29,4 +29,4 @@ const InputCodeModal = ({ isOpen, onClose }: SetNameModalProps) => {
     );
 };
 
-export default InputCodeModal;
+export default EnterRoomModal;

@@ -1,21 +1,21 @@
 import { useState } from "react";
 
 import Button from "../Common/Button";
-import InputCodeModal from "../Modals/InputCodeModal";
+import EnterRoomModal from "../Modals/EnterRoomModal";
 
 const EnterRoomButton = () => {
-    const [isInputCodeModalOpen, setInputCodeModalOpen] = useState(false);
+    const [isEnterRoomModalOpen, setEnterRoomModalOpen] = useState(false);
 
     const clickButton = () => {
-        setInputCodeModalOpen(true);
+        setEnterRoomModalOpen(true);
     };
 
-    const closeSetNameModal = () => setInputCodeModalOpen(false);
+    const closeSetNameModal = () => setEnterRoomModalOpen(false);
 
     return (
         <article>
             <Button text="코드입력" onClick={clickButton} style={{ marginBottom: "16px" }} />
-            <article>{isInputCodeModalOpen && <InputCodeModal isOpen={isInputCodeModalOpen} onClose={closeSetNameModal} />}</article>
+            <article>{isEnterRoomModalOpen && <EnterRoomModal isOpen={isEnterRoomModalOpen} onClose={closeSetNameModal} />}</article>
         </article>
     );
 };
