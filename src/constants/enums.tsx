@@ -15,4 +15,6 @@ export enum PlaylistModalType {
 export enum GameStatus {
     NOT_STARTED = 0,
     STARTED = 1,
+    IS_GAMING = 2,
+    IS_WAITING = 3,
 }

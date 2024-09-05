@@ -14,18 +14,17 @@ const UserPanel = () => {
     const navigate = useNavigate();
 
     const { userId } = useSelector((state: RootState) => state.user);
-    const { roomCode, managerId, users } = useSelector((state: RootState) => state.game);
+    const { roomCode, status, managerId, users } = useSelector((state: RootState) => state.game);
     const isManager = managerId === userId;
 
     useEffect(() => {
-        console.log(users);
         if (!roomCode) return;
 
         const socket = SocketService.getInstance(roomCode);
 
         const handleUserKick = (data: { kickedUserId: number; answer: GameAnswer }) => {
             const { kickedUserId, answer } = data;
-
+            
             if (userId === kickedUserId) {
                 alert("강퇴되었습니다.");
                 dispatch(resetGameState());
@@ -63,7 +62,7 @@ const UserPanel = () => {
                         <li className={`${styles.userColor} user-color${index + 1}`}></li>
                         <li>{item.nickname}</li>
                         <li>{item.score}</li>
-                        {isManager && item.userId !== userId && (
+                        {!status && isManager && item.userId !== userId && (
                             <li onClick={() => kickUser(item.userId)} style={{ color: "red", cursor: "pointer" }}>
                                 x
                             </li>

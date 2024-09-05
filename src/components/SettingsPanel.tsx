@@ -16,7 +16,7 @@ const SettingsPanel = () => {
 
     const dispatch = useDispatch();
     const { userId } = useSelector((state: RootState) => state.user);
-    const { roomCode, managerId, gameSetting } = useSelector((state: RootState) => state.game);
+    const { roomCode, managerId, users, gameSetting } = useSelector((state: RootState) => state.game);
     const isManager = managerId === userId;
 
     useEffect(() => {
@@ -49,7 +49,10 @@ const SettingsPanel = () => {
     };
 
     const closeSettingBoxModal = () => setSettingBoxModalOpen(false);
-    const handleClickGameStart = () => SocketService.socketEmit("game start");
+    const handleClickGameStart = () => {
+        if (1 >= users.length || users.length > 7) return alert("인원수가 너무 적습니다.");
+        SocketService.socketEmit("game start");
+    };
 
     return (
         <article className={styles.settingsPanelContainer}>

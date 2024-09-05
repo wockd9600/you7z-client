@@ -7,15 +7,7 @@ export interface GameUser {
     order: number;
     nickname: string;
     score: number;
-    isReady?: boolean;
-}
-
-// User 타입 정의
-export interface GameSong {
-    id: number;
-    url: string;
-    startTime: string;
-    description: string;
+    isReady: boolean;
 }
 
 // ChatMessage 타입 정의
@@ -40,23 +32,16 @@ export interface GameState {
     gameSetting: GameSetting;
     users: GameUser[];
     answers: GameAnswer[];
-    songs: GameSong[];
-    songIndex: 0 | 1;
 }
 
 // Initial state for the game
 const initialState: GameState = {
-    status: 0,
+    status: -1,
     roomCode: "",
     managerId: -1,
     gameSetting: { playlist: "", /* gameType: 0, */ targetScore: 0 },
     users: [],
     answers: [],
-    songs: [
-        { id: -1, url: "", startTime: "", description: "" },
-        { id: -1, url: "", startTime: "", description: "" },
-    ],
-    songIndex: 0,
 };
 
 export const gameSlice = createSlice({
@@ -80,12 +65,6 @@ export const gameSlice = createSlice({
         // },
         setTargetScore: (state, action: PayloadAction<number>) => {
             state.gameSetting.targetScore = action.payload;
-        },
-        setGameSongs: (state, action: PayloadAction<GameSong>) => {
-            state.songs[state.songIndex] = action.payload;
-        },
-        setGameSongIndex: (state) => {
-            state.songIndex = state.songIndex === 1 ? 0 : 1;
         },
         setAnswers: (state, action: PayloadAction<GameAnswer[]>) => {
             state.answers = action.payload;
@@ -132,6 +111,6 @@ export const gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatus, setRoomCode, setPlaylist, /* setGameType, */ setGameSongs, setGameSongIndex, setTargetScore, setAnswers, addUser, updateUserName, updateUserScore, updateUserIsReady, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
+export const { setStatus, setRoomCode, setPlaylist, /* setGameType, */ setTargetScore, setAnswers, addUser, updateUserName, updateUserScore, updateUserIsReady, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
 
 export default gameSlice.reducer;

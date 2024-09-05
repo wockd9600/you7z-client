@@ -13,7 +13,7 @@ const AnswerList = () => {
 
         return answers.map((answer) => {
             const matchingUser = userMap.get(answer.userId);
-            console.log(answer);
+            
             let index = 0;
             let nickname = "나간 유저";
 

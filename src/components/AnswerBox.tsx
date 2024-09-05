@@ -2,12 +2,16 @@ import { CSSProperties, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
-import { addAnswerMessage, setGameSongs, GameAnswer, GameSong, GameUser, updateUserScore } from "../redux/gameSlice";
+import { addAnswerMessage, GameAnswer, GameUser, updateUserScore } from "../redux/gameSlice";
+import { setGameSong, GameSong } from "../redux/songSlice";
 
 import AnswerList from "./AnswerList";
 import SocketService from "utils/socket";
 
+import { GameStatus } from "constants/enums";
+
 type SubmitAnswerProps = {
+    answerSongResponseData?: { answer: string; description: string };
     songResponseData?: GameSong;
     scoreResponseData?: GameUser;
     answerResponseData?: GameAnswer;
@@ -30,10 +34,20 @@ const AnswerBox = () => {
         const socket = SocketService.getInstance(roomCode);
 
         const handleSubmitAnswer = (data: SubmitAnswerProps) => {
-            const { songResponseData, scoreResponseData, answerResponseData } = data;
-            if (songResponseData) dispatch(setGameSongs(songResponseData));
-            if (scoreResponseData) dispatch(updateUserScore({ ...scoreResponseData }));
+            const { answerSongResponseData, songResponseData, scoreResponseData, answerResponseData } = data;
+
             if (answerResponseData) dispatch(addAnswerMessage(answerResponseData));
+            if (answerSongResponseData) {
+                const answer = { id: 0, isAlert: true, userId: 0, message: `정답은 "${answerSongResponseData.answer}" 입니다.` };
+                dispatch(addAnswerMessage(answer));
+                const description = { id: 0, isAlert: true, userId: 0, message: `${answerSongResponseData.description}` };
+                dispatch(addAnswerMessage(description));
+            }
+            if (songResponseData) {
+                localStorage.setItem("GameStatus", GameStatus.IS_WAITING.toString());
+                dispatch(setGameSong(songResponseData));
+            }
+            if (scoreResponseData) dispatch(updateUserScore({ ...scoreResponseData }));
         };
 
         socket.on("submit answer", handleSubmitAnswer);

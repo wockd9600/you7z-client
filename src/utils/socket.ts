@@ -15,7 +15,7 @@ class SocketService {
 
     public static getInstance(roomCode: string): Socket {
         if (this.instance) return this.instance;
-        
+
         const URL = process.env.REACT_APP_SERVER;
         this.instance = io(`${URL}`, {
             transports: ["websocket", "polling", "flashsocket"],
@@ -69,6 +69,11 @@ class SocketService {
         socket.on("disconnect", () => {
             this.state = SocketState.DISCONNECT;
             console.log("Socket disconnected");
+        });
+
+        socket.onAny((eventName, ...args) => {
+            console.log(`Received event: ${eventName}`, args);
+            // 여기서 모든 이벤트를 처리할 수 있습니다.
         });
 
         socket.on("reconnect_attempt", () => {

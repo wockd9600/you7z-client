@@ -1,8 +1,10 @@
 import { CSSProperties, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-import { addAnswerMessage, addUser, setGameSongs, GameAnswer, setAnswers, GameUser, removeUser } from "../redux/gameSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "redux/store";
+import { setStatus, addAnswerMessage, addUser, GameAnswer, setAnswers, GameUser, resetGameState, removeUser } from "../redux/gameSlice";
+import { setGameSong } from "../redux/songSlice";
 
 import SocketService from "../utils/socket";
 
@@ -12,6 +14,7 @@ import GameHeader from "components/GameHeader";
 import AnswerInput from "components/AnswerInput";
 
 import { useGameRoom } from "hooks/useGameRoom";
+import { GameStatus } from "constants/enums";
 
 const Game = () => {
     const gameContainer: CSSProperties = {
@@ -26,8 +29,7 @@ const Game = () => {
     const { roomCode } = useParams();
     const { getGameRoomInfo } = useGameRoom();
 
-    // 서버에서 방 정보를 가져온 뒤
-    // redux에 넣는다.
+    const { userId } = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
         if (!roomCode) {
@@ -35,12 +37,15 @@ const Game = () => {
             return;
         }
 
-        const sessionRoomCode = sessionStorage.getItem("roomCode");
-        if (!sessionRoomCode) SocketService.socketEmit("join user");
-
         getGameRoomInfo(roomCode);
 
         const socket = SocketService.getInstance(roomCode);
+
+        const sessionRoomCode = sessionStorage.getItem("roomCode");
+        if (!sessionRoomCode) {
+            SocketService.socketEmit("join user");
+            sessionStorage.setItem("roomCode", roomCode);
+        }
 
         const handleLeaveGame = (data: { leaveUserId: number; answer: GameAnswer }) => {
             const { leaveUserId, answer } = data;
@@ -49,19 +54,28 @@ const Game = () => {
         };
 
         const handleJoinUser = (user: GameUser) => {
+            if (user.userId === userId) return;
+
+            const answer = { id: 0, isAlert: true, userId: 0, message: `${user.nickname}님이 입장했습니다.` };
             dispatch(addUser(user));
+            dispatch(addAnswerMessage(answer));
         };
 
         const handleGamerStart = (data: any) => {
             const { gmaeSongData, gmaePlaylistData } = data;
-            if (gmaeSongData) dispatch(setGameSongs(gmaeSongData));
+
+            localStorage.setItem("GameStatus", GameStatus.STARTED.toString());
+
+            if (gmaeSongData) dispatch(setGameSong(gmaeSongData));
             if (gmaePlaylistData) {
                 const { title, discription } = gmaePlaylistData;
                 const answer = [
+                    { id: 0, isAlert: true, userId: 0, message: `게임 시작!!!` },
                     { id: 0, isAlert: true, userId: 0, message: `${title}` },
-                    { id: 0, isAlert: true, userId: 0, message: `${discription}` },
+                    { id: 0, isAlert: true, userId: 0, message: `${discription || ""}` },
                 ];
                 dispatch(setAnswers(answer));
+                dispatch(setStatus(1));
 
                 setTimeout(() => {
                     let count = 3;
@@ -70,7 +84,9 @@ const Game = () => {
                         dispatch(addAnswerMessage(countAnswer));
                         count -= 1;
 
-                        if (count <= 1) clearInterval(countInterval);
+                        if (count <= 0) {
+                            clearInterval(countInterval);
+                        }
                     }, 1000);
                 }, 2000);
             }
@@ -79,12 +95,15 @@ const Game = () => {
         socket.on("join user", handleJoinUser);
         socket.on("leave game", handleLeaveGame);
         socket.on("game start", handleGamerStart);
+
         return () => {
             socket.off("join user");
             socket.off("leave game");
             socket.off("game start");
             sessionStorage.removeItem("roomCode");
+            localStorage.removeItem("GameStatus");
             SocketService.clearInstance();
+            dispatch(resetGameState());
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
