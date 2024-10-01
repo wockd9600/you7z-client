@@ -9,6 +9,7 @@ import SocketService from "utils/socket";
 
 import Button from "./Common/Button";
 import SetNameModal from "./Modals/SetNameModal";
+import GameDescriptionModal from "./Modals/GameDescriptionModal";
 
 import styles from "./css/GameHeader.module.css";
 
@@ -19,15 +20,21 @@ const GameHeader = () => {
     const navigate = useNavigate();
 
     const [isSetNameModalOpen, setSetNameModalOpen] = useState(false);
+    const [isDescriptionModalOpen, setDescriptionModalOpen] = useState(false);
 
     const { userId } = useSelector((state: RootState) => state.user);
     const { roomCode, status, users } = useSelector((state: RootState) => state.game);
 
-    const clickButton = (): void => {
+    const clickSetNameButton = (): void => {
         setSetNameModalOpen(true);
     };
 
+    const clickDescriptionButton = (): void => {
+        setDescriptionModalOpen(true);
+    };
+
     const closeSetNameModal = () => setSetNameModalOpen(false);
+    const closeDescriptionModal = () => setDescriptionModalOpen(false);
 
     const copyRoomCode = () => {
         console.log("copy");
@@ -49,7 +56,7 @@ const GameHeader = () => {
             {status === GameStatus.NOT_STARTED ? (
                 <div className={styles.buttonContainer}>
                     <article style={{ width: "40%", zIndex: 1 }}>
-                        <Button text="이름" onClick={clickButton} style={{ width: "100%", height: "100%", fontSize: "14px" }} />
+                        <Button text="이름" onClick={clickSetNameButton} style={{ width: "100%", height: "100%", fontSize: "14px" }} />
                         <article>{isSetNameModalOpen && <SetNameModal isOpen={isSetNameModalOpen} onClose={closeSetNameModal} />}</article>
                     </article>
                     <Button text="나가기" onClick={leaveRoom} style={{ width: "55%", height: "100%", fontSize: "14px" }} />
@@ -57,7 +64,8 @@ const GameHeader = () => {
             ) : (
                 <div className={styles.buttonContainer}>
                     <article style={{ width: "40%", zIndex: 1 }}>
-                        <Button text="이름" disabled={true} style={{ width: "100%", height: "100%", fontSize: "14px" }} />
+                        <Button text="설명" onClick={clickDescriptionButton} style={{ width: "100%", height: "100%", fontSize: "14px" }} />
+                        <article>{isDescriptionModalOpen && <GameDescriptionModal isOpen={isDescriptionModalOpen} onClose={closeDescriptionModal} />}</article>
                     </article>
                     <Button text="나가기" disabled={true} style={{ width: "55%", height: "100%", fontSize: "14px" }} />
                 </div>

@@ -57,12 +57,12 @@ const SettingsPanel = () => {
     return (
         <article className={styles.settingsPanelContainer}>
             <ul className={`${styles.setingBox} ${isManager && styles.setingBoxManager}`} onClick={clickButton}>
-                <li className="ellipsis">{gameSetting.playlist}</li>
+                <li>{gameSetting.playlist}</li>
                 {/* <li>
                     듣기시간 : <span>{gameSetting.gameType ? "전부 듣기" : "1초 듣기"}</span>
                 </li> */}
                 <li>
-                    목표점수 : <span>{gameSetting.targetScore}</span>
+                    목표점수 : <span>{gameSetting.targetScore === 255 ? "없음" : gameSetting.targetScore}</span>
                 </li>
             </ul>
 

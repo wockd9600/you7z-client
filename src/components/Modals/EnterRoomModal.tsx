@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Modal from "../Common/Modal";
 
 import styles from "./css/InputTypeModal.module.css";
@@ -16,6 +16,10 @@ const EnterRoomModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const enterRoom = () => {
         if (roomCodeRef.current) enterGameRoom(roomCodeRef.current?.value);
     };
+
+    useEffect(() => {
+        roomCodeRef.current?.focus();
+    }, []);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>

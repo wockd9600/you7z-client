@@ -4,10 +4,11 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 // User 타입 정의
 export interface GameUser {
     userId: number;
-    order: number;
-    nickname: string;
-    score: number;
-    isReady: boolean;
+    status?: number;
+    order?: number;
+    nickname?: string;
+    score?: number;
+    isReady?: boolean;
 }
 
 // ChatMessage 타입 정의
@@ -20,6 +21,7 @@ export interface GameAnswer {
 
 export interface GameSetting {
     playlist: string;
+    description: string;
     // gameType: number;
     targetScore: number;
 }
@@ -39,7 +41,7 @@ const initialState: GameState = {
     status: -1,
     roomCode: "",
     managerId: -1,
-    gameSetting: { playlist: "", /* gameType: 0, */ targetScore: 0 },
+    gameSetting: { playlist: "", description: "", /* gameType: 0, */ targetScore: 0 },
     users: [],
     answers: [],
 };
@@ -60,6 +62,9 @@ export const gameSlice = createSlice({
         setPlaylist: (state, action: PayloadAction<string>) => {
             state.gameSetting.playlist = action.payload;
         },
+        setDescription: (state, action: PayloadAction<string>) => {
+            state.gameSetting.description = action.payload;
+        },
         // setGameType: (state, action: PayloadAction<number>) => {
         //     state.gameSetting.gameType = action.payload;
         // },
@@ -77,30 +82,25 @@ export const gameSlice = createSlice({
         },
 
         addUser: (state, action: PayloadAction<Omit<GameUser, "score">>) => {
-            state.users = [...state.users, { ...action.payload, score: 0 }];
+            state.users = [...state.users, { ...action.payload, isReady: true, score: 0 }];
         },
         addAnswerMessage: (state, action: PayloadAction<GameAnswer>) => {
             state.answers.push(action.payload);
         },
 
-        updateUserName: (state, action: PayloadAction<{ userId: number; name: string }>) => {
-            const { userId, name } = action.payload;
+        updateUserInfo: (state, action: PayloadAction<GameUser>) => {
+            const { userId, nickname, status, score, isReady } = action.payload;
             const user = state.users.find((u) => u.userId === userId);
             if (user) {
-                user.nickname = name;
-            }
-        },
-        updateUserScore: (state, action: PayloadAction<{ userId: number; score: number }>) => {
-            const user = state.users.find((u) => u.userId === action.payload.userId);
-            if (user) {
-                user.score = action.payload.score;
-            }
-        },
-        updateUserIsReady: (state, action: PayloadAction<{ userId: number; isReady: boolean }>) => {
-            const { userId, isReady } = action.payload;
-            const user = state.users.find((u) => u.userId === userId);
-            if (user) {
-                user.isReady = isReady;
+                if (typeof nickname === "string") {
+                    user.nickname = nickname;
+                } else if (typeof score === "number") {
+                    user.score = score;
+                } else if (typeof status === "number") {
+                    user.status = status;
+                } else if (typeof isReady === "boolean") {
+                    user.isReady = isReady;
+                }
             }
         },
 
@@ -111,6 +111,6 @@ export const gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatus, setRoomCode, setPlaylist, /* setGameType, */ setTargetScore, setAnswers, addUser, updateUserName, updateUserScore, updateUserIsReady, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
+export const { setStatus, setRoomCode, setManagerId, setPlaylist, setDescription, /* setGameType, */ setTargetScore, setAnswers, addUser, updateUserInfo, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
 
 export default gameSlice.reducer;

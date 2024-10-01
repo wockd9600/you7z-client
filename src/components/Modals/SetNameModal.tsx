@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 
@@ -44,6 +44,10 @@ const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
             }
         }
     };
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>

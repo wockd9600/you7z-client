@@ -1,6 +1,5 @@
 import { io, Socket } from "socket.io-client";
-// import EventManager from "./socketEvnetManager";
-// import { refreshToken, reLogin } from "@/utils/login";
+// import EventManager from "./socketEventManager";
 
 enum SocketState {
     DISCONNECT,
@@ -59,7 +58,7 @@ class SocketService {
         }
     }
 
-    // socket evnet
+    // socket event
     private static registerEvents(socket: Socket) {
         socket.on("connect", () => {
             this.state = SocketState.CONNECT;
@@ -79,16 +78,6 @@ class SocketService {
         socket.on("reconnect_attempt", () => {
             this.state = SocketState.WAITTING;
             console.log("reconnect attempt");
-        });
-
-        socket.on("tokenExpired", async (params) => {
-            const { event: name, ...data } = params;
-            if (localStorage.getItem("refresh_token")) {
-                // await refreshToken();
-                if (localStorage.getItem("access_token") && localStorage.getItem("refresh_token") && name) {
-                    this.socketEmit(name, data.data);
-                }
-            }
         });
 
         // socket.on("relogin", () => reLogin());

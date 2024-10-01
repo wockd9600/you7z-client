@@ -13,12 +13,12 @@ const AnswerList = () => {
 
         return answers.map((answer) => {
             const matchingUser = userMap.get(answer.userId);
-            
+
             let index = 0;
             let nickname = "나간 유저";
 
             if (matchingUser) {
-                nickname = matchingUser.nickname;
+                nickname = matchingUser.nickname!;
                 index = matchingUser.index + 1;
             }
 
@@ -31,8 +31,11 @@ const AnswerList = () => {
     }, [users, answers]);
 
     useEffect(() => {
-        if (scrollBoxRef.current) {
-            scrollBoxRef.current.scrollTop = scrollBoxRef.current.scrollHeight;
+        const dom = scrollBoxRef.current;
+        if (dom) {
+            if (dom.scrollHeight - 100 < dom.scrollTop + dom.offsetHeight) {
+                dom.scrollTop = dom.scrollHeight;
+            }
         }
     }, [enrichedAnswers]);
 
@@ -44,7 +47,15 @@ const AnswerList = () => {
                         enrichedAnswers.map((item, index) => {
                             return item.isAlert ? (
                                 <p key={index} className={`${styles.answer} alert-color`}>
-                                    {item.message}
+                                    {item.message.split(/(&_C[^&_C]+&_C)/).map((part, i) =>
+                                        part.startsWith("&_C") && part.endsWith("&_C") ? (
+                                            <span key={i} style={{ color: "#79EDFF", fontWeight: "bold" }}>
+                                                {part.replace(/&_C/g, "")}
+                                            </span>
+                                        ) : (
+                                            part
+                                        )
+                                    )}
                                 </p>
                             ) : (
                                 <p key={index} className={styles.answer}>

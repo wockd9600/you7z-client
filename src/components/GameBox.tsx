@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, MutableRefObject } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
 import YouTube, { YouTubeEvent } from "react-youtube";
 
-import { GameUser, updateUserIsReady } from "../redux/gameSlice";
+import { setStatus, GameUser, updateUserInfo, setAnswers, setManagerId, removeUser } from "../redux/gameSlice";
 import { GameSong, setGameSong, setGameSongIndex } from "../redux/songSlice";
 
 import SocketService from "../utils/socket";
@@ -17,6 +17,13 @@ import Button from "./Common/Button";
 import styles from "./css/GameBox.module.css";
 
 import { GameStatus } from "constants/enums";
+import Timer from "./Timer";
+
+interface GameBoxProps {
+    playerRef1: MutableRefObject<YouTubePlayer | null>;
+    playerRef2: MutableRefObject<YouTubePlayer | null>;
+    playerRef3: MutableRefObject<YouTubePlayer | null>;
+}
 
 interface YouTubePlayer {
     playVideo: () => void;
@@ -24,25 +31,40 @@ interface YouTubePlayer {
     mute: () => void;
 }
 
-const GameBox = () => {
+const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
     const usersRef = useRef<GameUser[]>([]);
-    const playerRef1 = useRef<YouTubePlayer | null>(null);
-    const playerRef2 = useRef<YouTubePlayer | null>(null);
+    const songIndexRef = useRef<Number>(0);
+    // const playerRef1 = useRef<YouTubePlayer | null>(null);
+    // const playerRef2 = useRef<YouTubePlayer | null>(null);
+    // const playerRef3 = useRef<YouTubePlayer | null>(null);
 
     const [isScoreBoardModalOpen, setScoreBoardModalOpen] = useState(false);
+    const [newUsers, setNewUsers] = useState<{ user_id: number }[]>([]);
+
+    const [isPassSongButton, setIsPassSongButton] = useState(false);
+    const [isPlaySongButtonForSafari, setIsPlaySongButtonForSafari] = useState(false);
     const [isNextSongButton, setIsNextSongButton] = useState(false);
+    const [isNextSongButtonDisable, setIsNextSongButtonDisable] = useState(false);
     const [isSpeakerIcon, setIsSpeakerIcon] = useState(false);
+    const [isTimer, setIsTimer] = useState(false);
 
     const dispatch = useDispatch();
 
     const { userId } = useSelector((state: RootState) => state.user);
     const { roomCode, status, users } = useSelector((state: RootState) => state.game);
     const { song1, song2, songIndex } = useSelector((state: RootState) => state.song);
-    let gameFinish = true;
 
     useEffect(() => {
         usersRef.current = users;
     }, [users]);
+
+    useEffect(() => {
+        songIndexRef.current = songIndex;
+    }, [songIndex]);
+
+    const _onReadyTemp = (event: YouTubeEvent) => {
+        playerRef3.current = event.target;
+    };
 
     useEffect(() => {
         if (!roomCode) return;
@@ -56,16 +78,21 @@ const GameBox = () => {
         // };
         const socket = SocketService.getInstance(roomCode);
 
-        socket.on("get song", handleGetSong);
+        socket.on("pass song", handlePassSong);
+        socket.on("all pass song", handleAllPassSong);
+        socket.on("next song", handleNextSong);
         socket.on("ready song", handleReadySong);
         socket.on("all ready song", handleAllReadySong);
         socket.on("play song", handlePlaySong);
+        socket.on("game finish", handleGameFinish);
 
         return () => {
-            socket.off("get song");
+            socket.off("pass song");
+            socket.off("next song");
             socket.off("ready song");
             socket.off("all ready song");
             socket.off("play song");
+            socket.off("game finish");
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomCode]);
@@ -74,47 +101,50 @@ const GameBox = () => {
     //     setScoreBoardModalOpen(true);
     // };
 
-    const closeScoreBoardModal = () => setScoreBoardModalOpen(false);
+    const closeScoreBoardModal = () => {
+        if (Array.isArray(newUsers)) {
+            const users = usersRef.current;
+            users.forEach((user) => {
+                if (!newUsers.some((newUser) => newUser.user_id === user.userId)) {
+                    dispatch(removeUser(user.userId));
+                } else {
+                    dispatch(updateUserInfo({ userId: user.userId, score: 0 }));
+                }
+            });
+        }
+
+        setScoreBoardModalOpen(false);
+        dispatch(setAnswers([]));
+        setTimeout(() => setNewUsers([]), 100);
+    };
 
     const _onReady = (event: YouTubeEvent, playerNumber: 0 | 1) => {
-        console.log("---------on ready----------");
-        if (playerNumber === 0) playerRef1.current = event.target;
-        else playerRef2.current = event.target;
+        if (playerNumber === 0) {
+            if (!song1.url) return;
+            playerRef1.current = event.target;
+        } else {
+            if (!song2.url) return;
+            playerRef2.current = event.target;
+        }
+
         // const user = usersRef.current.find((item) => item.userId === userId);
         // if (user?.userId === 5) return;
 
+        // 이미 게임이 시작된 상황이라면
         const sessionGameStatusString = localStorage.getItem("GameStatus");
         if (sessionGameStatusString) {
             const sessionGameStatus = parseInt(sessionGameStatusString);
-            setTimeout(() => {
-                const user = usersRef.current.find((item) => item.userId === userId);
-
-                console.log(sessionGameStatus === GameStatus.IS_GAMING, user?.isReady);
-                if (sessionGameStatus === GameStatus.IS_GAMING && user && user.isReady) {
+            if (sessionGameStatus === GameStatus.IS_GAMING) {
+                const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                if (isSafari) {
+                    setIsPlaySongButtonForSafari(true);
+                } else {
                     handlePlaySong();
-                    return;
                 }
-            }, 100);
-        }
-
-        SocketService.socketEmit("ready song");
-
-        let cnt = 0;
-        let getSongInterval: NodeJS.Timeout;
-        getSongInterval = setInterval(() => {
-            cnt += 1;
-
-            if (cnt > 30) {
-                clearInterval(getSongInterval);
-                alert("오류가 발생했습니다. 다시 로그인 해주세요.");
+                return;
             }
-
-            if (!usersRef.current) return clearInterval(getSongInterval);
-            const user = usersRef.current.find((item) => item.userId === userId);
-
-            if (user && user.isReady) clearInterval(getSongInterval);
-            else SocketService.socketEmit("ready song");
-        }, 1500);
+        }
+        SocketService.socketEmit("ready song");
     };
 
     const _onEnd = () => {
@@ -124,61 +154,106 @@ const GameBox = () => {
         }
     };
 
-    const handleGetSong = (song: GameSong) => {
-        if (!usersRef.current) return;
+    const handlePassSong = (passUserId: number) => {
+        if (userId === passUserId) {
+            setIsNextSongButtonDisable(true);
+        }
+        dispatch(updateUserInfo({ userId: passUserId, status: 1 }));
+    };
 
-        const user = usersRef.current.find((user) => user.userId === userId);
-        if (!song || !user || !user.isReady) dispatch(setGameSong(song));
+    const handleAllPassSong = () => {
+        setIsPassSongButton(false);
+    };
+
+    const handleNextSong = (song: GameSong, notAgreeUserId?: number[]) => {
+        if (notAgreeUserId && Array.isArray(notAgreeUserId)) {
+            notAgreeUserId.forEach((readyUserId) => {
+                dispatch(updateUserInfo({ userId: readyUserId, isReady: false }));
+            });
+
+            if (!notAgreeUserId.includes(userId)) return;
+        }
+
+        setIsPassSongButton(false);
+        dispatch(setGameSong(song));
     };
 
     const handleReadySong = (readyUserId: number) => {
-        dispatch(updateUserIsReady({ userId: readyUserId, isReady: true }));
+        setIsPassSongButton(false);
+        dispatch(updateUserInfo({ userId: readyUserId, isReady: true }));
     };
 
     const handleAllReadySong = (authUserId: number) => {
-        dispatch(updateUserIsReady({ userId, isReady: true }));
+        dispatch(updateUserInfo({ userId, isReady: true }));
+        // console.log("all ready song", userId, authUserId);
         if (userId !== authUserId) return;
-
         const sessionGameStatusString = localStorage.getItem("GameStatus");
+
         if (sessionGameStatusString) {
             const sessionGameStatus = parseInt(sessionGameStatusString);
-            console.log(authUserId, userId);
             if (sessionGameStatus === GameStatus.IS_WAITING) {
                 setIsNextSongButton(true);
             }
         }
     };
 
+    const handleGameFinish = (finishResponseData: any) => {
+        const { newUsers, managerId } = finishResponseData;
+        setTimeout(() => {
+            if (managerId) dispatch(setManagerId(managerId));
+            if (newUsers) setNewUsers(newUsers);
+            setScoreBoardModalOpen(true);
+            dispatch(setStatus(0));
+            setIsTimer(false);
+        }, 5000);
+    };
+
     const handlePlaySong = () => {
-        localStorage.setItem("GameStatus", GameStatus.IS_GAMING.toString());
-
+        setIsTimer(false);
+        setTimeout(() => setIsTimer(true), 100);
         setIsSpeakerIcon(true);
-        console.log(playerRef1.current, songIndex);
-        if (songIndex === 0) {
-            if (playerRef1.current) {
-                console.log("playing video")
-            }
-            setTimeout(() => {
-                console.log("?");
-                // playerRef1.current && playerRef1.current.mute();
 
+        if (songIndexRef.current === 0) {
+            setTimeout(() => {
+                playerRef2.current && playerRef2.current.stopVideo();
                 playerRef1.current && playerRef1.current.playVideo();
-            }, 1000);
-            playerRef2.current = null;
+            }, 300);
+            // playerRef2.current = null;
         } else {
-            playerRef2.current && playerRef2.current.playVideo();
-            playerRef1.current = null;
+            setTimeout(() => {
+                playerRef1.current && playerRef1.current.stopVideo();
+                playerRef2.current && playerRef2.current.playVideo();
+            }, 300);
+            // playerRef2.current = null;
         }
-        setGameSongIndex();
+
+        setTimeout(() => {
+            dispatch(setGameSongIndex());
+            localStorage.setItem("GameStatus", GameStatus.IS_GAMING.toString());
+        }, 100);
+
+        usersRef.current.forEach((user) => {
+            if (user.status !== -1) {
+                dispatch(updateUserInfo({ userId: user.userId, status: 0 }));
+            }
+        });
+
+        dispatch(setAnswers([]));
+
+        setIsPassSongButton(true);
         setIsNextSongButton(false);
+        setIsNextSongButtonDisable(false);
+        setIsPlaySongButtonForSafari(false);
     };
 
     const playSong = () => SocketService.socketEmit("play song");
+    const passSong = () => SocketService.socketEmit("pass song");
 
     return (
         <section>
             <article className={styles.container}>
                 <UserPanel />
+                {isTimer && <Timer />}
                 {status === GameStatus.NOT_STARTED && <SettingsPanel />}{" "}
                 {status === GameStatus.STARTED && (
                     <article className={`${styles.settingsPanelContainer} ${styles.musicContainer}`}>
@@ -190,41 +265,41 @@ const GameBox = () => {
                                 </article>
                             )}
                             {
-                                <article>
-                                    {song1.url && (
-                                        <YouTube
-                                            videoId={song1.url}
-                                            opts={{
-                                                playerVars: { start: song1.startTime },
-                                            }}
-                                            onReady={(event: YouTubeEvent) => _onReady(event, 0)}
-                                            onEnd={_onEnd}
-                                            style={{ display: "none" }}
-                                        />
-                                    )}
-                                    {song2.url && (
-                                        <YouTube
-                                            videoId={song2.url}
-                                            opts={{
-                                                playerVars: { start: song2.startTime },
-                                            }}
-                                            onReady={(event: YouTubeEvent) => _onReady(event, 1)}
-                                            style={{ display: "none" }}
-                                        />
-                                    )}
+                                <article style={{ marginTop: "100px" }}>
+                                    <YouTube
+                                        videoId={song1.url || ""}
+                                        opts={{
+                                            playerVars: { start: song1.startTime },
+                                        }}
+                                        onReady={(event: YouTubeEvent) => _onReady(event, 0)}
+                                        onEnd={_onEnd}
+                                        style={{ display: "none" }}
+                                    />
+                                    <YouTube
+                                        videoId={song2.url || ""}
+                                        opts={{
+                                            playerVars: { start: song2.startTime },
+                                        }}
+                                        onReady={(event: YouTubeEvent) => _onReady(event, 1)}
+                                        style={{ display: "none" }}
+                                    />
+                                    <YouTube
+                                        onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
+                                        videoId="bB8JaY0iZw4"
+                                        style={{ display: "none" }}
+                                    />
                                 </article>
                             }
                         </div>
-                        {isNextSongButton && <Button text="노래 스킵" onClick={playSong} style={{ width: "80%", height: "40px" }} />}
+                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} onClick={handlePlaySong} style={{ width: "80%", height: "40px" }} />}
+                        {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
+                            <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
+                        )}
+                        {isNextSongButton && <Button text="다음 노래로" onClick={playSong} style={{ width: "80%", height: "40px" }} />}
                     </article>
                 )}
                 {/* <Button text="노래모음 만들기" onClick={clickButton} style={{ marginBottom: "16px" }} /> */}
-                {gameFinish && (
-                    <article style={{ zIndex: 2 }}>
-                        {" "}
-                        <ScoreBoardModal isOpen={isScoreBoardModalOpen} onClose={closeScoreBoardModal} />
-                    </article>
-                )}
+                <article style={{ zIndex: 2 }}>{isScoreBoardModalOpen && <ScoreBoardModal isOpen={isScoreBoardModalOpen} onClose={closeScoreBoardModal} />}</article>
             </article>
         </section>
     );

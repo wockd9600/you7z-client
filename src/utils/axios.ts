@@ -1,4 +1,5 @@
 import axios from "axios";
+import { refreshToken } from "./auth";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER;
 // axios.defaults.headers.common['X-User-Agent'] = navigator.userAgent;
@@ -39,14 +40,20 @@ axios.interceptors.response.use(
         // Failed to execute 'setRequestHeader' on 'XMLHttpRequest' 에러
         // error.config의 header 값을 json으로 바꿔줘서 해결.
         // https://github.com/axios/axios/issues/5143
-        errorAPI.headers = errorAPI.headers.toJSON();
+        // errorAPI.headers = errorAPI.headers.toJSON();
 
         if (error.response && error.response.status === 419 && errorAPI.retry === undefined) {
             errorAPI.retry = true;
             // console.log('토큰이 이상한 오류일 경우');
-            // await refreshToken();
-            // console.log(errorAPI)
-            return await axios(errorAPI);
+            const success = await refreshToken();
+            if (success) {
+                return axios(errorAPI); // 재시도
+            } else {
+                return Promise.reject({
+                    ...error.response,
+                    message: "Token refresh failed, needs reLogin",
+                });
+            }
         }
 
         return Promise.reject(error.response);

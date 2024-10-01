@@ -2,8 +2,8 @@ import { CSSProperties, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
-import { addAnswerMessage, GameAnswer, GameUser, updateUserScore } from "../redux/gameSlice";
-import { setGameSong, GameSong } from "../redux/songSlice";
+import { addAnswerMessage, GameAnswer, GameUser, updateUserInfo } from "../redux/gameSlice";
+import { GameSong } from "../redux/songSlice";
 
 import AnswerList from "./AnswerList";
 import SocketService from "utils/socket";
@@ -34,26 +34,42 @@ const AnswerBox = () => {
         const socket = SocketService.getInstance(roomCode);
 
         const handleSubmitAnswer = (data: SubmitAnswerProps) => {
-            const { answerSongResponseData, songResponseData, scoreResponseData, answerResponseData } = data;
+            const { answerSongResponseData, scoreResponseData, answerResponseData } = data;
 
             if (answerResponseData) dispatch(addAnswerMessage(answerResponseData));
             if (answerSongResponseData) {
-                const answer = { id: 0, isAlert: true, userId: 0, message: `정답은 "${answerSongResponseData.answer}" 입니다.` };
+                const answer = { id: 0, isAlert: true, userId: 0, message: `정답은 &_C${answerSongResponseData.answer}&_C 입니다.` };
+                dispatch(addAnswerMessage(answer));
+                if (answerSongResponseData.description.length !== 0) {
+                    const description = { id: 0, isAlert: true, userId: 0, message: `${answerSongResponseData.description}` };
+                    dispatch(addAnswerMessage(description));
+                }
+                localStorage.setItem("GameStatus", GameStatus.IS_WAITING.toString());
+            }
+            // if (songResponseData) {
+            //     console.log('is wating : ', GameStatus.IS_WAITING);
+            //     localStorage.setItem("GameStatus", GameStatus.IS_WAITING.toString());
+            //     dispatch(setGameSong(songResponseData));
+            // }
+            if (scoreResponseData) dispatch(updateUserInfo({ ...scoreResponseData }));
+        };
+
+        const handleShowAnswer = (data: any) => {
+            const { answerSongResponseData } = data;
+            if (answerSongResponseData) {
+                const answer = { id: 0, isAlert: true, userId: 0, message: `정답은 &_C${answerSongResponseData.answer}&_C 입니다.` };
                 dispatch(addAnswerMessage(answer));
                 const description = { id: 0, isAlert: true, userId: 0, message: `${answerSongResponseData.description}` };
                 dispatch(addAnswerMessage(description));
             }
-            if (songResponseData) {
-                localStorage.setItem("GameStatus", GameStatus.IS_WAITING.toString());
-                dispatch(setGameSong(songResponseData));
-            }
-            if (scoreResponseData) dispatch(updateUserScore({ ...scoreResponseData }));
         };
 
         socket.on("submit answer", handleSubmitAnswer);
+        socket.on("show answer", handleShowAnswer);
 
         return () => {
             socket.off("submit answer");
+            socket.off("show answer");
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomCode]);

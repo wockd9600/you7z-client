@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
-import { removeUser, updateUserName, resetGameState, GameAnswer, addAnswerMessage } from "../redux/gameSlice";
+import { removeUser, updateUserInfo, resetGameState, GameAnswer, addAnswerMessage } from "../redux/gameSlice";
 
 import SocketService from "../utils/socket";
 
@@ -24,7 +24,7 @@ const UserPanel = () => {
 
         const handleUserKick = (data: { kickedUserId: number; answer: GameAnswer }) => {
             const { kickedUserId, answer } = data;
-            
+
             if (userId === kickedUserId) {
                 alert("강퇴되었습니다.");
                 dispatch(resetGameState());
@@ -37,15 +37,22 @@ const UserPanel = () => {
 
         const handleChangeUserName = (data: { userId: number; name: string }) => {
             const { userId, name } = data;
-            dispatch(updateUserName({ userId, name }));
+            dispatch(updateUserInfo({ userId, nickname: name }));
         };
 
-        socket.on("change user name", handleChangeUserName);
+        const handleChangeUserStatus = (data: { userId: number; status: number }) => {
+            const { userId, status } = data;
+            dispatch(updateUserInfo({ userId, status }));
+        };
+
         socket.on("user kick", handleUserKick);
+        socket.on("change user name", handleChangeUserName);
+        socket.on("change user status", handleChangeUserStatus);
 
         return () => {
             socket.off("user kick");
             socket.off("change user name");
+            socket.off("change user status");
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomCode]);
@@ -62,6 +69,8 @@ const UserPanel = () => {
                         <li className={`${styles.userColor} user-color${index + 1}`}></li>
                         <li>{item.nickname}</li>
                         <li>{item.score}</li>
+                        {status === 1 && !item.isReady && <li>노래 받는 중..</li>}
+                        {item.status === -1 && <li style={{ color: "red" }}>연결x</li>}
                         {!status && isManager && item.userId !== userId && (
                             <li onClick={() => kickUser(item.userId)} style={{ color: "red", cursor: "pointer" }}>
                                 x

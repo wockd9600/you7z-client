@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { postCreateGameRoom, postEnterGameRoom } from "../services/gameRoomService";
+import { handleLogin } from "utils/error";
 
 export const useJoinGameRoom = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const createGameRoom = async () => {
@@ -15,7 +18,7 @@ export const useJoinGameRoom = () => {
 
             navigate(`/${roomData.roomCode}`);
         } catch (error) {
-            if (error instanceof Error) console.log(error.message);
+            handleLogin({ error, dispatch, navigate });
             console.log(error);
         }
     };
@@ -30,7 +33,7 @@ export const useJoinGameRoom = () => {
 
             navigate(`/${roomCode}`);
         } catch (error) {
-            if (error instanceof Error) console.log(error.message);
+            handleLogin({ error, dispatch, navigate });
             console.log(error);
         }
     };

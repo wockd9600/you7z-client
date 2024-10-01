@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { login as loginRedux, logout as logoutRedux } from "../redux/userSlice";
 import { loginUser, logoutUser } from "../services/authService";
+import { handleLogin } from "utils/error";
 
 export const useAuth = () => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const useAuth = () => {
             dispatch(loginRedux({ name: nickname, userId }));
             navigate("/");
         } catch (error) {
-            console.log(error);
+            handleLogin({ error, dispatch, navigate });
         }
     };
 

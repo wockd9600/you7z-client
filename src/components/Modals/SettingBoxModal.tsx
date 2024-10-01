@@ -21,7 +21,7 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const [selectedOption, setSelectedOption] = useState<number>(-1);
     // const [gameType, setGameType] = useState<number>(1);
-    const [targetScore, setTargetScore] = useState<number>(5);
+    const [targetScore, setTargetScore] = useState<number>(255);
     const [options, setOptions] = useState([{ value: -1, label: "로딩 중" }]);
 
     // options는 세션에 넣자.
@@ -68,7 +68,7 @@ const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
 
     const changeRoomSetting = () => {
         // if (![0, 1].includes(gameType)) return;
-        if (![5, 10, 15, 20].includes(targetScore)) return;
+        if (![5, 10, 15, 20, 255].includes(targetScore)) return;
 
         const data = {
             playlistId: selectedOption,
@@ -103,6 +103,7 @@ const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
                         <option value={10}>10</option>
                         <option value={15}>15</option>
                         <option value={20}>20</option>
+                        <option value={255}>없음</option>
                     </select>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
