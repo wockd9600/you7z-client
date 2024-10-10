@@ -218,14 +218,14 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         }, 5000);
     };
 
-    const handlePlaySong = (clickAudioPlayer = false) => {
+    const handlePlaySong = (possibleAudioPlayer = true) => {
         setIsTimer(false);
         setTimeout(() => setIsTimer(true), 100);
         setIsSpeakerIcon(true);
 
         // 모바일은 자동재생이 안된다.
-        // 자동재생이고(클릭x) 데스크탑이면 => 재생 버튼을 생성한다.
-        if (!clickAudioPlayer && isDesktop()) {
+        // 자동재생이고(클릭x) 모바일이면 => 재생 버튼을 생성한다.
+        if (possibleAudioPlayer && !isDesktop()) {
             setIsPlaySongButtonForSafari(true);
             return;
         }
@@ -304,7 +304,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                 </article>
                             }
                         </div>
-                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} onClick={() => handlePlaySong(true)} style={{ width: "80%", height: "40px" }} />}
+                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} onClick={() => handlePlaySong(false)} style={{ width: "80%", height: "40px" }} />}
                         {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
                             <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
                         )}
