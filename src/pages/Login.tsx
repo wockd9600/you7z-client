@@ -30,6 +30,7 @@ const Login = () => {
             <div style={layout}>
                 <KakaoButton />
                 <p style={text}>해당 홈페이지는 개인 정보를 저장하지 않습니다.</p>
+                <p style={text}>크롬 브라우저에서 더 쾌적하게 할 수 있습니다.</p>
             </div>
         </div>
     );

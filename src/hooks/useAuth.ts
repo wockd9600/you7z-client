@@ -23,6 +23,7 @@ export const useAuth = () => {
             navigate("/");
         } catch (error) {
             handleLogin({ error, dispatch, navigate });
+            navigate("/");
         }
     };
 

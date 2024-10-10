@@ -101,6 +101,15 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
     //     setScoreBoardModalOpen(true);
     // };
 
+    function isDesktop(): boolean {
+        const userAgent = navigator.userAgent.toLowerCase();
+
+        // 모바일 기기에 해당하는 문자열이 포함되어 있는지 확인
+        const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+        return !isMobile; // 모바일이 아니면 데스크톱으로 판단
+    }
+
     const closeScoreBoardModal = () => {
         if (Array.isArray(newUsers)) {
             const users = usersRef.current;
@@ -209,10 +218,17 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         }, 5000);
     };
 
-    const handlePlaySong = () => {
+    const handlePlaySong = (clickAudioPlayer = false) => {
         setIsTimer(false);
         setTimeout(() => setIsTimer(true), 100);
         setIsSpeakerIcon(true);
+
+        // 모바일은 자동재생이 안된다.
+        // 자동재생이고(클릭x) 데스크탑이면 => 재생 버튼을 생성한다.
+        if (!clickAudioPlayer && isDesktop()) {
+            setIsPlaySongButtonForSafari(true);
+            return;
+        }
 
         if (songIndexRef.current === 0) {
             setTimeout(() => {
@@ -284,15 +300,11 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
                                         style={{ display: "none" }}
                                     />
-                                    <YouTube
-                                        onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
-                                        videoId="bB8JaY0iZw4"
-                                        style={{ display: "none" }}
-                                    />
+                                    <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" style={{ display: "none" }} />
                                 </article>
                             }
                         </div>
-                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} onClick={handlePlaySong} style={{ width: "80%", height: "40px" }} />}
+                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} onClick={() => handlePlaySong(true)} style={{ width: "80%", height: "40px" }} />}
                         {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
                             <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
                         )}

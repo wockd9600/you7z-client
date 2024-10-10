@@ -1,9 +1,7 @@
 import { postGetRefreshToken } from "../services/authService";
 
 export const refreshToken = async () => {
-    console.log("refresh");
     const refresh_token = localStorage.getItem("refresh_token");
-    console.log(refresh_token);
     if (!refresh_token) return false;
 
     try {
@@ -13,6 +11,8 @@ export const refreshToken = async () => {
         localStorage.setItem("access_token", access_token);
         return true;
     } catch (error) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("access_token");
         console.log(error);
         return false;
         // console.log(error);
