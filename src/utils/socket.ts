@@ -62,18 +62,18 @@ class SocketService {
     private static registerEvents(socket: Socket) {
         socket.on("connect", () => {
             this.state = SocketState.CONNECT;
-            console.log("Socket connected");
+            // console.log("Socket connected");
         });
 
         socket.on("disconnect", () => {
             this.state = SocketState.DISCONNECT;
-            console.log("Socket disconnected");
+            // console.log("Socket disconnected");
         });
 
-        socket.onAny((eventName, ...args) => {
-            console.log(`Received event: ${eventName}`, args);
-            // 여기서 모든 이벤트를 처리할 수 있습니다.
-        });
+        // socket.onAny((eventName, ...args) => {
+        // console.log(`Received event: ${eventName}`, args);
+        // 여기서 모든 이벤트를 처리할 수 있습니다.
+        // });
 
         socket.on("reconnect_attempt", () => {
             this.state = SocketState.WAITTING;

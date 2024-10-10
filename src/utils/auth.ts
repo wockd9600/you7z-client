@@ -1,7 +1,9 @@
 import { postGetRefreshToken } from "../services/authService";
 
 export const refreshToken = async () => {
+    console.log("refresh");
     const refresh_token = localStorage.getItem("refresh_token");
+    console.log(refresh_token);
     if (!refresh_token) return false;
 
     try {

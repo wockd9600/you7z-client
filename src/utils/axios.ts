@@ -42,10 +42,13 @@ axios.interceptors.response.use(
         // https://github.com/axios/axios/issues/5143
         // errorAPI.headers = errorAPI.headers.toJSON();
 
+        console.log("errorAPI.retry")
+        console.log(errorAPI.retry)
         if (error.response && error.response.status === 419 && errorAPI.retry === undefined) {
             errorAPI.retry = true;
             // console.log('토큰이 이상한 오류일 경우');
             const success = await refreshToken();
+            console.log("success:", success)
             if (success) {
                 return axios(errorAPI); // 재시도
             } else {

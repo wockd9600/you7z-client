@@ -23,6 +23,7 @@ interface YouTubePlayer {
     playVideo: () => void;
     stopVideo: () => void;
     mute: () => void;
+    videoTitle: string;
 }
 
 const Game = () => {
@@ -48,7 +49,6 @@ const Game = () => {
     const { songIndex } = useSelector((state: RootState) => state.song);
 
     useEffect(() => {
-        console.log("song index", songIndex);
         songIndexRef.current = songIndex;
     }, [songIndex]);
 
@@ -163,20 +163,23 @@ const Game = () => {
             // console.log(document.visibilityState);
             const handleVideoPlayback = (pp: any, sp: any) => {
                 pp && pp.playVideo();
-                sp && sp.stopVideo();
+                sp && sp.pauseVideo();
             };
-
+            
             if (type === "hidden") {
-                // if (songIndexRef.current === 0) {
-                handleVideoPlayback(playerRef3.current, playerRef2.current);
-                handleVideoPlayback(playerRef3.current, playerRef1.current);
-                // } else {
-                // handleVideoPlayback(playerRef3.current, playerRef1.current);
-                // }
+                if (songIndexRef.current === 0) {
+                    if (!playerRef2.current) return;
+                    handleVideoPlayback(playerRef3.current, playerRef2.current);
+                } else {
+                    if (!playerRef1.current) return;
+                    handleVideoPlayback(playerRef3.current, playerRef1.current);
+                }
             } else if (type === "visible") {
                 if (songIndexRef.current === 0) {
+                    if (!playerRef2.current) return;
                     handleVideoPlayback(playerRef2.current, playerRef3.current);
                 } else {
+                    if (!playerRef1.current) return;
                     handleVideoPlayback(playerRef1.current, playerRef3.current);
                 }
             }

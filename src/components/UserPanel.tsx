@@ -69,7 +69,8 @@ const UserPanel = () => {
                         <li className={`${styles.userColor} user-color${index + 1}`}></li>
                         <li>{item.nickname}</li>
                         <li>{item.score}</li>
-                        {status === 1 && !item.isReady && <li>노래 받는 중..</li>}
+                        {item.isReady}
+                        {status === 1 && item.isReady === false && <li>노래 받는 중..</li>}
                         {item.status === -1 && <li style={{ color: "red" }}>연결x</li>}
                         {!status && isManager && item.userId !== userId && (
                             <li onClick={() => kickUser(item.userId)} style={{ color: "red", cursor: "pointer" }}>

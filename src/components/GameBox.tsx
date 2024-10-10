@@ -199,6 +199,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
 
     const handleGameFinish = (finishResponseData: any) => {
         const { newUsers, managerId } = finishResponseData;
+        localStorage.setItem("GameStatus", GameStatus.NOT_STARTED.toString());
         setTimeout(() => {
             if (managerId) dispatch(setManagerId(managerId));
             if (newUsers) setNewUsers(newUsers);

@@ -4,7 +4,7 @@ import type { RootState } from "./redux/store";
 import { login } from "./redux/userSlice";
 
 import { Route, Routes } from "react-router-dom";
-import "./assets/styles/App.css";
+import "assets/styles/App.css";
 import Home from "pages/Home";
 import Login from "pages/Login";
 import Game from "pages/Game";
