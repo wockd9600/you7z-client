@@ -225,21 +225,25 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
 
         // 모바일은 자동재생이 안된다.
         // 자동재생이고(클릭x) 모바일이면 => 재생 버튼을 생성한다.
+        console.log(possibleAudioPlayer, !isDesktop())
         if (possibleAudioPlayer && !isDesktop()) {
             setIsPlaySongButtonForSafari(true);
             return;
         }
 
         if (songIndexRef.current === 0) {
+            console.log('song index', songIndexRef.current)
+            console.log('song index', playerRef1.current)
+            console.log('song index', playerRef2.current)
             setTimeout(() => {
-                playerRef2.current && playerRef2.current.stopVideo();
-                playerRef1.current && playerRef1.current.playVideo();
+                if (playerRef2.current) playerRef2.current.stopVideo();
+                if (playerRef1.current) playerRef1.current.playVideo();
             }, 300);
             // playerRef2.current = null;
         } else {
             setTimeout(() => {
-                playerRef1.current && playerRef1.current.stopVideo();
-                playerRef2.current && playerRef2.current.playVideo();
+                if (playerRef1.current) playerRef1.current.stopVideo();
+                if (playerRef2.current) playerRef2.current.playVideo();
             }, 300);
             // playerRef2.current = null;
         }
@@ -304,7 +308,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                 </article>
                             }
                         </div>
-                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} onClick={() => handlePlaySong(false)} style={{ width: "80%", height: "40px" }} />}
+                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} disabled={!playerRef1.current} onClick={() => handlePlaySong(false)} style={{ width: "80%", height: "40px" }} />}
                         {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
                             <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
                         )}
