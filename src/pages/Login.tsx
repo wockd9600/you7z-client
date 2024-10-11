@@ -55,7 +55,10 @@ const Login = () => {
             }
             console.log(endTy, distanceY);
         };
-
+        const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        window.addEventListener(isIos === true ? 'mouseout' : 'blur', () => {
+            alert("d?")
+        });
         window.addEventListener("touchstart", touchStartHandler);
         window.addEventListener("touchmove", touchsMoveHandler);
 
