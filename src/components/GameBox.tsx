@@ -225,16 +225,12 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
 
         // 모바일은 자동재생이 안된다.
         // 자동재생이고(클릭x) 모바일이면 => 재생 버튼을 생성한다.
-        console.log(possibleAudioPlayer, !isDesktop())
         if (possibleAudioPlayer && !isDesktop()) {
             setIsPlaySongButtonForSafari(true);
             return;
         }
 
         if (songIndexRef.current === 0) {
-            console.log('song index', songIndexRef.current)
-            console.log('song index', playerRef1.current)
-            console.log('song index', playerRef2.current)
             setTimeout(() => {
                 if (playerRef2.current) playerRef2.current.stopVideo();
                 if (playerRef1.current) playerRef1.current.playVideo();
@@ -294,7 +290,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 0)}
                                         onEnd={_onEnd}
-                                        style={{ display: "none" }}
+                                        // style={{ display: "none" }}
                                     />
                                     <YouTube
                                         videoId={song2.url || ""}
@@ -302,7 +298,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                             playerVars: { start: song2.startTime },
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
-                                        style={{ display: "none" }}
+                                        // style={{ display: "none" }}
                                     />
                                     <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" style={{ display: "none" }} />
                                 </article>
