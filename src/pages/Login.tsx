@@ -4,6 +4,7 @@ import { CSSProperties, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 import KakaoButton from "../components/Buttons/KakaoButton";
+import useWindowFocus from "hooks/useWindowFocus";
 
 const Login = () => {
     const { login } = useAuth();
@@ -55,10 +56,6 @@ const Login = () => {
             }
             console.log(endTy, distanceY);
         };
-        const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-        window.addEventListener(isIos === true ? 'mouseout' : 'blur', () => {
-            alert("d?")
-        });
         window.addEventListener("touchstart", touchStartHandler);
         window.addEventListener("touchmove", touchsMoveHandler);
 
@@ -68,6 +65,20 @@ const Login = () => {
             window.removeEventListener("touchmove", touchsMoveHandler);
         };
     }, []);
+
+    /** 화면에서 나갔을때 **/
+    const onWindowBlur = () => {
+        // 여기에 원하는 동작 구현
+        alert("blur")
+    };
+
+    /** 화면으로 복귀했을때 **/
+    const onWindowFocus = () => {
+        // 여기에 원하는 동작 구현
+        alert("focus")
+    };
+
+    useWindowFocus(onWindowFocus, onWindowBlur);
 
     return (
         <div>
