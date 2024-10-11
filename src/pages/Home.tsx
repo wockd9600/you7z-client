@@ -1,8 +1,5 @@
-// 더보기
-
 import MainBox from "components/MainBox";
 import DropdownMenu from "../components/DropdownMenu";
-
 
 const Home = () => {
     return (
