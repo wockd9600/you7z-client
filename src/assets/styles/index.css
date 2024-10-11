@@ -41,6 +41,12 @@ button:disabled {
     text-overflow: ellipsis;
 }
 
+.hidden {
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+}
+
 .user-color0 {
     background-color: #8e8e8e;
     color: #8e8e8e;
@@ -80,4 +86,3 @@ button:disabled {
     background-color: #088008;
     color: #088008;
 }
-

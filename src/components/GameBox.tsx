@@ -226,6 +226,8 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         // 모바일은 자동재생이 안된다.
         // 자동재생이고(클릭x) 모바일이면 => 재생 버튼을 생성한다.
         if (possibleAudioPlayer && !isDesktop()) {
+            if (playerRef2.current) playerRef2.current.stopVideo();
+            if (playerRef1.current) playerRef1.current.stopVideo();
             setIsPlaySongButtonForSafari(true);
             return;
         }
@@ -290,7 +292,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 0)}
                                         onEnd={_onEnd}
-                                        // style={{ display: "none" }}
+                                        className="hidden"
                                     />
                                     <YouTube
                                         videoId={song2.url || ""}
@@ -298,9 +300,9 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                             playerVars: { start: song2.startTime },
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
-                                        // style={{ display: "none" }}
+                                        className="hidden"
                                     />
-                                    <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" style={{ display: "none" }} />
+                                    <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" className="hidden" />
                                 </article>
                             }
                         </div>
