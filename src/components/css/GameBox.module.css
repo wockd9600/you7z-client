@@ -103,3 +103,12 @@
         opacity: 0;
     }
 }
+
+.buttonsMobileStyle {
+    position: absolute;
+    display: flex;
+    justify-content: end;
+    right: 10px;
+    bottom: 80px;
+    z-index: 1;
+}

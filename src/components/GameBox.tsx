@@ -299,7 +299,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 0)}
                                         onEnd={_onEnd}
-                                        className="hidden"
+                                        // className="hidden"
                                     />
                                     <YouTube
                                         videoId={song2.url || ""}
@@ -307,17 +307,23 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                             playerVars: { start: song2.startTime },
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
-                                        className="hidden"
+                                        // className="hidden"
                                     />
-                                    <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" className="hidden" />
+                                    <YouTube
+                                        onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
+                                        videoId="bB8JaY0iZw4"
+                                        // className="hidden"
+                                    />
                                 </article>
                             }
                         </div>
-                        {isPlaySongButtonForSafari && <Button text={"노래 재생"} disabled={!playerRef1.current} onClick={() => handlePlaySong(false)} style={{ width: "80%", height: "40px" }} />}
-                        {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
-                            <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
-                        )}
-                        {isNextSongButton && <Button text="다음 노래로" onClick={playSong} style={{ width: "80%", height: "40px" }} />}
+                        <div className={styles.buttonsMobileStyle}>
+                            {isPlaySongButtonForSafari && <Button text={"노래 재생"} disabled={!playerRef1.current} onClick={() => handlePlaySong(false)} style={{ width: "80%", height: "40px" }} />}
+                            {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
+                                <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
+                            )}
+                            {isNextSongButton && <Button text="다음 노래로" onClick={playSong} style={{ width: "80%", height: "40px" }} />}
+                        </div>
                     </article>
                 )}
                 {/* <Button text="노래모음 만들기" onClick={clickButton} style={{ marginBottom: "16px" }} /> */}

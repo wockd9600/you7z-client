@@ -42,7 +42,7 @@ const PlaylistInfo = ({ playlistTitle, playlistDescription, setPlaylistTitle, se
                 <p>제목</p>
                 <input type="text" className={styles.inputStyle} defaultValue={playlistTitle} onChange={handleOnchangeTitle} onBlur={(e) => handleBlur(e, "p-title")} />
                 {isTitle && (
-                    <p className={styles.inputFormMessage} style={{ color: "#FF0000" }}>
+                    <p className={styles.inputFormMessage} style={{ color: "#FF0000", bottom: "-3px" }}>
                         제목을 입력해 주세요.
                     </p>
                 )}

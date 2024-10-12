@@ -10,6 +10,7 @@ const AnswerInput = () => {
     const [value, setValue] = useState("");
 
     const handleAnswerSubmit = () => {
+        if (inputRef.current) inputRef.current?.focus();
         if (value.trim()) {
             try {
                 SocketService.socketEmit("submit answer", { message: value });
@@ -32,7 +33,6 @@ const AnswerInput = () => {
 
         if (e.key === "Enter") {
             e.preventDefault();
-            if (inputRef.current) inputRef.current?.focus();
             handleAnswerSubmit();
         }
     };
