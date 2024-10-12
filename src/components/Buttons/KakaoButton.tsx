@@ -1,7 +1,8 @@
 function KakaoButton() {
     const button = {
-        height: "36px",
-        fontSize: "16px",
+        height: "48px",
+        padding: "0 20px",
+        fontSize: "18px",
     };
 
     const kakaoLogin = function () {

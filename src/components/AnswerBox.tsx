@@ -20,6 +20,7 @@ type SubmitAnswerProps = {
 const AnswerBox = () => {
     const container: CSSProperties = {
         position: "relative",
+        width: "100%",
         height: "100%",
         flex: 1,
         overflow: "auto",

@@ -136,6 +136,13 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
             playerRef2.current = event.target;
         }
 
+        const iframes = document.getElementsByTagName("iframe");
+
+        // 각 iframe의 title 속성을 변경
+        for (let i = 0; i < iframes.length; i++) {
+            iframes[i].title = "무제";
+        }
+
         // const user = usersRef.current.find((item) => item.userId === userId);
         // if (user?.userId === 5) return;
 

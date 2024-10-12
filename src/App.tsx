@@ -52,10 +52,12 @@ function App() {
 
     return (
         <div className="App">
-            <Routes>
-                <Route path="/" element={isLogin ? <Home /> : <Login />} />
-                <Route path="/:roomCode" element={<Game />} />
-            </Routes>
+            <div className="AppContainer">
+                <Routes>
+                    <Route path="/" element={isLogin ? <Home /> : <Login />} />
+                    <Route path="/:roomCode" element={<Game />} />
+                </Routes>
+            </div>
         </div>
     );
 }

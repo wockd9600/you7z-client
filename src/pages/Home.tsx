@@ -3,7 +3,7 @@ import DropdownMenu from "../components/DropdownMenu";
 
 const Home = () => {
     return (
-        <section style={{ height: "100%" }}>
+        <section style={{ position: "relative", height: "100%" }}>
             <DropdownMenu></DropdownMenu>
             <MainBox />
         </section>

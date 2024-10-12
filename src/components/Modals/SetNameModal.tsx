@@ -49,10 +49,21 @@ const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
         inputRef.current?.focus();
     }, []);
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.nativeEvent.isComposing) {
+            return;
+        }
+
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleSetName();
+        }
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>
             <div>
-                <input type="text" className={styles.inputStyle} ref={inputRef} placeholder={name} />
+                <input type="text" className={styles.inputStyle} ref={inputRef} onKeyDown={handleKeyDown} placeholder={name} />
                 <button type="button" className={styles.buttonStyle} onClick={handleSetName}>
                     변경
                 </button>
