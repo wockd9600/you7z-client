@@ -164,7 +164,6 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
     };
 
     const _onEnd = () => {
-        console.log("Video has ended!");
         if (isNextSongButton && (playerRef1.current || playerRef2.current)) {
             playSong();
         }
@@ -201,7 +200,6 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
 
     const handleAllReadySong = (authUserId: number) => {
         dispatch(updateUserInfo({ userId, isReady: true }));
-        // console.log("all ready song", userId, authUserId);
         if (userId !== authUserId) return;
         const sessionGameStatusString = localStorage.getItem("GameStatus");
 
@@ -299,7 +297,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 0)}
                                         onEnd={_onEnd}
-                                        // className="hidden"
+                                        className="hidden"
                                     />
                                     <YouTube
                                         videoId={song2.url || ""}
@@ -307,12 +305,12 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                             playerVars: { start: song2.startTime },
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
-                                        // className="hidden"
+                                        className="hidden"
                                     />
                                     <YouTube
                                         onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
                                         videoId="bB8JaY0iZw4"
-                                        // className="hidden"
+                                        className="hidden"
                                     />
                                 </article>
                             }

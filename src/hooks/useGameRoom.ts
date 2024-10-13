@@ -14,7 +14,6 @@ export const useGameRoom = () => {
         try {
             const data = await getGameRoom(roomCode);
             const { roomData, gameSongDto } = data;
-            // console.log(data)
             if (!data.success) {
                 alert(data.message);
                 navigate("/");

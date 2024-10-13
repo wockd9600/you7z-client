@@ -48,7 +48,6 @@ const AnswerBox = () => {
                 localStorage.setItem("GameStatus", GameStatus.IS_WAITING.toString());
             }
             // if (songResponseData) {
-            //     console.log('is wating : ', GameStatus.IS_WAITING);
             //     localStorage.setItem("GameStatus", GameStatus.IS_WAITING.toString());
             //     dispatch(setGameSong(songResponseData));
             // }
