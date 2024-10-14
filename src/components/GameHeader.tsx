@@ -55,19 +55,19 @@ const GameHeader = () => {
             </div>
             {status === GameStatus.NOT_STARTED ? (
                 <div className={styles.buttonContainer}>
-                    <article style={{ width: "40%", zIndex: 1 }}>
+                    <article style={{ width: "44%", zIndex: 2 }}>
                         <Button text="이름" onClick={clickSetNameButton} style={{ width: "100%", height: "100%", fontSize: "14px" }} />
                         <article>{isSetNameModalOpen && <SetNameModal isOpen={isSetNameModalOpen} onClose={closeSetNameModal} />}</article>
                     </article>
-                    <Button text="나가기" onClick={leaveRoom} style={{ width: "55%", height: "100%", fontSize: "14px" }} />
+                    <Button text="나가기" onClick={leaveRoom} style={{ width: "54%", height: "100%", fontSize: "14px" }} />
                 </div>
             ) : (
                 <div className={styles.buttonContainer}>
-                    <article style={{ width: "40%", zIndex: 1 }}>
+                    <article style={{ width: "44%", zIndex: 2 }}>
                         <Button text="설명" onClick={clickDescriptionButton} style={{ width: "100%", height: "100%", fontSize: "14px" }} />
                         <article>{isDescriptionModalOpen && <GameDescriptionModal isOpen={isDescriptionModalOpen} onClose={closeDescriptionModal} />}</article>
                     </article>
-                    <Button text="나가기" disabled={true} style={{ width: "55%", height: "100%", fontSize: "14px" }} />
+                    <Button text="나가기" disabled={true} style={{ width: "54%", height: "100%", fontSize: "14px" }} />
                 </div>
             )}
         </article>

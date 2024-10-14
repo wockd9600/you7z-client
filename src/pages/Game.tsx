@@ -23,6 +23,7 @@ interface YouTubePlayer {
     playVideo: () => void;
     stopVideo: () => void;
     mute: () => void;
+    getPlayerState: () => number;
     videoTitle: string;
 }
 
@@ -62,10 +63,10 @@ const Game = () => {
 
         const socket = SocketService.getInstance(roomCode);
 
-        const sessionRoomCode = sessionStorage.getItem("roomCode");
+        const sessionRoomCode = localStorage.getItem("roomCode");
         if (!sessionRoomCode) {
             SocketService.socketEmit("join user");
-            sessionStorage.setItem("roomCode", roomCode);
+            localStorage.setItem("roomCode", roomCode);
         }
 
         const handleLeaveGame = (data: { leaveUserId: number; answer: GameAnswer; nextManagerId: number | null }) => {
@@ -147,8 +148,6 @@ const Game = () => {
             socket.off("leave game");
             socket.off("game start");
             socket.off("token expired");
-            sessionStorage.removeItem("roomCode");
-            localStorage.removeItem("GameStatus");
             SocketService.clearInstance();
             dispatch(resetGameState());
         };
@@ -165,7 +164,7 @@ const Game = () => {
                 pp && pp.playVideo();
                 sp && sp.pauseVideo();
             };
-            
+
             if (type === "hidden") {
                 if (songIndexRef.current === 0) {
                     if (!playerRef2.current) return;

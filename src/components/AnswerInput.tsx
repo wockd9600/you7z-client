@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./Common/Button";
 
 import SocketService from "utils/socket";
@@ -8,6 +8,11 @@ import styles from "./css/AnswerBox.module.css";
 const AnswerInput = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [value, setValue] = useState("");
+
+    useEffect(() => {
+        if (inputRef && inputRef.current) inputRef.current.focus();
+        if (inputRef && inputRef.current) inputRef.current.click();
+    }, []);
 
     const handleAnswerSubmit = () => {
         if (inputRef.current) inputRef.current?.focus();
@@ -40,7 +45,7 @@ const AnswerInput = () => {
     return (
         <article className={styles.answerInputContainer}>
             <input type="text" ref={inputRef} value={value} className={styles.AnswerInput} onChange={handleChange} onKeyDown={handleKeyDown} />
-            <Button text="전송" style={{ width: "60px", height: "100%" }} onClick={handleAnswerSubmit} />
+            <Button text="전송" style={{ width: "80px", height: "100%" }} onClick={handleAnswerSubmit} />
         </article>
     );
 };

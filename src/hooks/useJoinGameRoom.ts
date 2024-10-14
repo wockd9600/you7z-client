@@ -25,6 +25,9 @@ export const useJoinGameRoom = () => {
 
     const enterGameRoom = async (roomCode: string) => {
         try {
+            localStorage.removeItem("roomCode");
+            localStorage.removeItem("GameStatus");
+
             const roomData = await postEnterGameRoom(roomCode);
 
             if (!roomData.success) {

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-const Timer = () => {
+interface TimerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    isMobile: boolean;
+}
+
+const Timer = ({ isMobile = false }: TimerProps) => {
     const [seconds, setSeconds] = useState(0);
 
     useEffect(() => {
@@ -21,7 +25,7 @@ const Timer = () => {
     }, []);
 
     return (
-        <div style={{ position: "absolute", right: 10 }}>
+        <div style={{ position: "absolute", right: 10, bottom: isMobile ? "125px" : undefined }}>
             <h1>{54 - seconds}초</h1>
         </div>
     );

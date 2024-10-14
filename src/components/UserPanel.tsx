@@ -63,23 +63,28 @@ const UserPanel = () => {
 
     return (
         <article className={styles.userPanelContainer}>
-            {users.map((item, index) => {
-                return (
-                    <ul key={index} className={styles.userRow}>
-                        <li className={`${styles.userColor} user-color${index + 1}`}></li>
-                        <li>{item.nickname}</li>
-                        <li>{item.score}</li>
-                        {item.isReady}
-                        {status === 1 && item.isReady === false && <li>노래 받는 중..</li>}
-                        {item.status === -1 && <li style={{ color: "red" }}>연결x</li>}
-                        {!status && isManager && item.userId !== userId && (
-                            <li onClick={() => kickUser(item.userId)} style={{ color: "red", cursor: "pointer" }}>
-                                x
-                            </li>
-                        )}
-                    </ul>
-                );
-            })}
+            {[...users]
+                .map((item, index) => {
+                    return { ...item, order: index };
+                })
+                .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+                .map((item, index) => {
+                    return (
+                        <ul key={index} className={styles.userRow}>
+                            <li className={`${styles.userColor} user-color${item.order + 1}`}></li>
+                            <li>{item.nickname}</li>
+                            <li>{item.score}</li>
+                            {item.isReady}
+                            {status === 1 && item.isReady === false && <li>노래 받는 중..</li>}
+                            {item.status === -1 && <li style={{ color: "red" }}>연결x</li>}
+                            {!status && isManager && item.userId !== userId && (
+                                <li onClick={() => kickUser(item.userId)} style={{ color: "red", cursor: "pointer" }}>
+                                    x
+                                </li>
+                            )}
+                        </ul>
+                    );
+                })}
         </article>
     );
 };

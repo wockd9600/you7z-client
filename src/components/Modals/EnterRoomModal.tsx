@@ -21,10 +21,21 @@ const EnterRoomModal = ({ isOpen, onClose }: SetNameModalProps) => {
         roomCodeRef.current?.focus();
     }, []);
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.nativeEvent.isComposing) {
+            return;
+        }
+
+        if (e.key === "Enter") {
+            e.preventDefault();
+            enterRoom();
+        }
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>
             <div className={styles.divStyle}>
-                <input type="text" ref={roomCodeRef} className={styles.inputStyle} placeholder="입장 코드" />
+                <input type="text" ref={roomCodeRef} className={styles.inputStyle} onKeyDown={handleKeyDown} placeholder="입장 코드" />
                 <button type="button" className={styles.buttonStyle} onClick={enterRoom}>
                     입장
                 </button>

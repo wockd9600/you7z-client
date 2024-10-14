@@ -9,7 +9,7 @@
 
 .roomCodeBox {
     display: flex;
-    width: 65%;
+    width: 55%;
     margin: 5px;
     justify-content: center;
     align-items: center;
@@ -21,7 +21,7 @@
 }
 
 .buttonContainer {
-    width: 35%;
+    width: 45%;
     display: flex;
     margin: 5px 5px;
     justify-content: space-between;

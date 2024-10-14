@@ -62,7 +62,7 @@ const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>
-            <div>
+            <div className={styles.divStyle}>
                 <input type="text" className={styles.inputStyle} ref={inputRef} onKeyDown={handleKeyDown} placeholder={name} />
                 <button type="button" className={styles.buttonStyle} onClick={handleSetName}>
                     변경

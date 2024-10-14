@@ -16,7 +16,7 @@ const GameDescriptionModal = ({ isOpen, onClose }: GameDescriptionModalProps) =>
     const { gameSetting } = useSelector((state: RootState) => state.game);
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} zIndex={10} onClose={onClose}>
             <div className={styles.container}>
                 <article className={styles.table} style={{ width: "100%" }}>
                     <h1 style={{ fontSize: 16, marginBottom: 15 }}>게임 설명</h1>
