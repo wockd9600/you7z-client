@@ -168,17 +168,21 @@ const Game = () => {
             if (type === "hidden") {
                 if (songIndexRef.current === 0) {
                     if (!playerRef2.current) return;
+                    if (typeof playerRef2.current.playVideo !== "function") return;
                     handleVideoPlayback(playerRef3.current, playerRef2.current);
                 } else {
                     if (!playerRef1.current) return;
+                    if (typeof playerRef1.current.playVideo !== "function") return;
                     handleVideoPlayback(playerRef3.current, playerRef1.current);
                 }
             } else if (type === "visible") {
                 if (songIndexRef.current === 0) {
                     if (!playerRef2.current) return;
+                    if (typeof playerRef2.current.playVideo !== "function") return;
                     handleVideoPlayback(playerRef2.current, playerRef3.current);
                 } else {
                     if (!playerRef1.current) return;
+                    if (typeof playerRef1.current.playVideo !== "function") return;
                     handleVideoPlayback(playerRef1.current, playerRef3.current);
                 }
             }

@@ -121,6 +121,13 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomCode]);
 
+    function isDesktop(): boolean {
+        const userAgent = navigator.userAgent.toLowerCase();
+        // 모바일 기기에 해당하는 문자열이 포함되어 있는지 확인
+        const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+        return !isMobile; // 모바일이 아니면 데스크톱으로 판단
+    }
+
     const closeScoreBoardModal = () => {
         if (Array.isArray(newUsers)) {
             const users = usersRef.current;
@@ -165,7 +172,11 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         if (sessionGameStatusString) {
             const sessionGameStatus = parseInt(sessionGameStatusString);
             if (sessionGameStatus === GameStatus.IS_GAMING) {
-                handlePlaySong();
+                if (isDesktop()) {
+                    handlePlaySong();
+                } else {
+                    setIsPlaySongButton(true);
+                }
                 return;
             }
         }
@@ -232,10 +243,19 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         }, 5000);
     };
 
-    const handlePlaySong = () => {
+    const handlePlaySong = (possibleAudioPlayer = true) => {
         setIsTimer(false);
         setTimeout(() => setIsTimer(true), 100);
         setIsSpeakerIcon(true);
+
+        // 모바일은 자동재생이 안된다.
+        // 자동재생이고(클릭x) 모바일이면 => 재생 버튼을 생성한다.
+        if (possibleAudioPlayer && !isDesktop()) {
+            if (playerRef2.current) playerRef2.current.stopVideo();
+            if (playerRef1.current) playerRef1.current.stopVideo();
+            setIsPlaySongButton(true);
+            return;
+        }
 
         if (songIndexRef.current === 0) {
             if (playerRef2.current) playerRef2.current.stopVideo();
@@ -243,18 +263,18 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                 playerRef1.current.playVideo();
                 let cnt1 = 0;
                 const interval = setInterval(() => {
+                    cnt1++;
                     if (cnt1 > 50) clearInterval(interval);
-                    if (playerRef1.current) {
+                    if (playerRef1.current && typeof playerRef1.current.playVideo === "function") {
                         const status = playerRef1.current.getPlayerState();
                         playerRef1.current.playVideo();
                         if (status !== 1) {
                             if (status !== 3) setIsPlaySongButton(true);
-                        } else {
-                            setIsPlaySongButton(false);
-                            clearInterval(interval);
+                            return;
                         }
                     }
-                    cnt1++;
+                    setIsPlaySongButton(false);
+                    clearInterval(interval);
                 }, 200);
             }
             // playerRef2.current = null;
@@ -264,18 +284,18 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                 playerRef2.current.playVideo();
                 let cnt2 = 0;
                 const interval = setInterval(() => {
+                    cnt2++;
                     if (cnt2 > 50) clearInterval(interval);
-                    if (playerRef2.current) {
+                    if (playerRef2.current && typeof playerRef2.current.playVideo === "function") {
                         const status = playerRef2.current.getPlayerState();
                         playerRef2.current.playVideo();
                         if (status !== 1) {
                             if (status !== 3) setIsPlaySongButton(true);
-                        } else {
-                            setIsPlaySongButton(false);
-                            clearInterval(interval);
+                            return;
                         }
                     }
-                    cnt2++;
+                    setIsPlaySongButton(false);
+                    clearInterval(interval);
                 }, 200);
             }
             // playerRef2.current = null;
@@ -336,27 +356,16 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
                                         className="hidden"
                                     />
-                                    <YouTube
-                                        onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
-                                        videoId="bB8JaY0iZw4"
-                                        className="hidden"
-                                    />
+                                    <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" className="hidden" />
                                 </article>
                             }
                         </div>
                         <div className={isMobile ? styles.buttonsMobileStyle : styles.buttonsDesktopStyle}>
-                            {
-                                (!isNextSongButton && isPlaySongButton) && (
-                                    isMobile ?
-                                    (
-                                        <Button text={'넘기기'} onClick={playSong} style={{ width: "100%", height: "40px" }} />
-
-                                    ) :
-                                    (
-                                        <div className={styles.clickCircle}>Click Me!</div>
-                                    )
-                                )
-                            }
+                            {!isNextSongButton && isPlaySongButton && (
+                                <div className={styles.clickCircle} onClick={isMobile ? () => handlePlaySong(false) : undefined}>
+                                    Click Me!
+                                </div>
+                            )}
                             {!isNextSongButton && !isPlaySongButton && isPassSongButton && (
                                 <Button text={`넘기기 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "100%", height: "40px" }} disabled={isNextSongButtonDisable} />
                             )}
