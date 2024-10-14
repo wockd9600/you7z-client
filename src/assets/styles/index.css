@@ -10,12 +10,6 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-button {
-    color: #000;
-    border-radius: 0;
-    border: 1px solid #000;
-}
-
 ul,
 ol,
 li,
@@ -35,6 +29,12 @@ textarea {
 
 button {
     cursor: pointer;
+}
+
+button:disabled {
+    color: #dfdfdf !important;
+    /* background-color: #dfdfdf !important; */
+    border: 1px solid #dfdfdf !important;
 }
 
 button:disabled {

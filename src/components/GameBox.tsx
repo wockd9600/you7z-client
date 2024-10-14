@@ -38,6 +38,8 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
     // const playerRef2 = useRef<YouTubePlayer | null>(null);
     // const playerRef3 = useRef<YouTubePlayer | null>(null);
 
+    const [isMobile, setIsMobile] = useState(false);
+
     const [isScoreBoardModalOpen, setScoreBoardModalOpen] = useState(false);
     const [newUsers, setNewUsers] = useState<{ user_id: number }[]>([]);
 
@@ -53,6 +55,27 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
     const { userId } = useSelector((state: RootState) => state.user);
     const { roomCode, status, users } = useSelector((state: RootState) => state.game);
     const { song1, song2, songIndex } = useSelector((state: RootState) => state.song);
+
+    useEffect(() => {
+        const checkDevice = () => {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileDevices = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/;
+            setIsMobile(mobileDevices.test(userAgent));
+        };
+
+        checkDevice(); // 초기 렌더링 시 체크
+
+        // 윈도우 크기 변경 시에도 모바일인지 체크
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // 너비 기준으로 모바일/데스크탑 판단
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         usersRef.current = users;
@@ -307,20 +330,16 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
                                         className="hidden"
                                     />
-                                    <YouTube
-                                        onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
-                                        videoId="bB8JaY0iZw4"
-                                        className="hidden"
-                                    />
+                                    <YouTube onReady={(event: YouTubeEvent) => _onReadyTemp(event)} videoId="bB8JaY0iZw4" className="hidden" />
                                 </article>
                             }
                         </div>
-                        <div className={styles.buttonsMobileStyle}>
-                            {isPlaySongButtonForSafari && <Button text={"노래 재생"} disabled={!playerRef1.current} onClick={() => handlePlaySong(false)} style={{ width: "80%", height: "40px" }} />}
+                        <div className={isMobile ? styles.buttonsMobileStyle : styles.buttonsDesktopStyle}>
+                            {isPlaySongButtonForSafari && <Button text={"노래 재생"} disabled={!playerRef1.current} onClick={() => handlePlaySong(false)} style={{ width: "100%", height: "40px", backgroundColor: "yellow" }} />}
                             {!isNextSongButton && !isPlaySongButtonForSafari && isPassSongButton && (
-                                <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "80%", height: "40px" }} disabled={isNextSongButtonDisable} />
+                                <Button text={`다음 노래로 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "100%", height: "40px" }} disabled={isNextSongButtonDisable} />
                             )}
-                            {isNextSongButton && <Button text="다음 노래로" onClick={playSong} style={{ width: "80%", height: "40px" }} />}
+                            {isNextSongButton && <Button text="다음 노래로" onClick={playSong} style={{ width: "100%", height: "40px" }} />}
                         </div>
                     </article>
                 )}
