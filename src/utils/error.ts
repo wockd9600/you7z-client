@@ -13,7 +13,6 @@ type handleLoginType = {
 export const handleLogin = (arg: handleLoginType) => {
     const { error, dispatch, navigate, to } = arg;
     const toUrl = to ? to : "/";
-    console.log(error);
     if (error && error.status && error.status === 419) {
         if (dispatch) {
             dispatch(logout());

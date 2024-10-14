@@ -326,7 +326,7 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 0)}
                                         onEnd={_onEnd}
-                                        // className="hidden"
+                                        className="hidden"
                                     />
                                     <YouTube
                                         videoId={song2.url || ""}
@@ -334,18 +334,29 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
                                             playerVars: { start: song2.startTime },
                                         }}
                                         onReady={(event: YouTubeEvent) => _onReady(event, 1)}
-                                        // className="hidden"
+                                        className="hidden"
                                     />
                                     <YouTube
                                         onReady={(event: YouTubeEvent) => _onReadyTemp(event)}
                                         videoId="bB8JaY0iZw4"
-                                        // className="hidden"
+                                        className="hidden"
                                     />
                                 </article>
                             }
                         </div>
                         <div className={isMobile ? styles.buttonsMobileStyle : styles.buttonsDesktopStyle}>
-                            {!isNextSongButton && isPlaySongButton && <div className={styles.clickCircle}>Click Me!</div>}
+                            {
+                                (!isNextSongButton && isPlaySongButton) && (
+                                    isMobile ?
+                                    (
+                                        <Button text={'넘기기'} onClick={playSong} style={{ width: "100%", height: "40px" }} />
+
+                                    ) :
+                                    (
+                                        <div className={styles.clickCircle}>Click Me!</div>
+                                    )
+                                )
+                            }
                             {!isNextSongButton && !isPlaySongButton && isPassSongButton && (
                                 <Button text={`넘기기 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "100%", height: "40px" }} disabled={isNextSongButtonDisable} />
                             )}
