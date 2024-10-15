@@ -6,6 +6,7 @@ import styles from "./css/AnswerBox.module.css";
 
 const AnswerList = () => {
     const scrollBoxRef = useRef<HTMLDivElement>(null);
+    const { userId } = useSelector((state: RootState) => state.user);
     const { users, answers } = useSelector((state: RootState) => state.game);
 
     const enrichedAnswers = useMemo(() => {
@@ -59,7 +60,8 @@ const AnswerList = () => {
                                 </p>
                             ) : (
                                 <p key={index} className={styles.answer}>
-                                    <span className={`${styles.answerName} user-color${item.index}`}>{item.nickname}</span> : {item.message}
+                                    <span className={`${styles.answerName} user-color${item.index}`}>{item.nickname}: </span>
+                                    <span className={`${item.userId === userId ? styles.myText : ""}`}>{item.message}</span>
                                 </p>
                             );
                         })}
