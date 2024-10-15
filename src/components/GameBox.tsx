@@ -248,8 +248,9 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
 
     const handlePlaySong = (possibleAudioPlayer = true) => {
         localStorage.setItem("GameStatus", GameStatus.IS_GAMING.toString());
-        if (inputRef && inputRef.current) inputRef.current.focus();
+        // focusInput();
 
+        setIsNextSongButton(false);
         setIsTimer(false);
         setTimeout(() => setIsTimer(true), 100);
         setIsSpeakerIcon(true);
@@ -320,17 +321,19 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
         dispatch(setAnswers([]));
 
         setIsPassSongButton(true);
-        setIsNextSongButton(false);
         setIsNextSongButtonDisable(false);
     };
 
-    const playSong = () => {
+    const focusInput = () => {
         if (inputRef && inputRef.current) inputRef.current.focus();
-        setIsNextSongButton(false); 
+    };
+
+    const playSong = () => {
+        // focusInput();
         SocketService.socketEmit("play song");
     };
     const passSong = () => {
-        if (inputRef && inputRef.current) inputRef.current.focus();
+        // focusInput();
         SocketService.socketEmit("pass song");
     };
 
@@ -372,7 +375,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
                                 </article>
                             }
                         </div>
-                        <div className={isMobile ? styles.buttonsMobileStyle : styles.buttonsDesktopStyle}>
+                        <div className={isMobile ? styles.buttonsMobileStyle : styles.buttonsDesktopStyle} onClick={isMobile ? focusInput : undefined}>
                             {!isNextSongButton && isPlaySongButton && (
                                 <div className={styles.clickCircle} onClick={isMobile ? () => handlePlaySong(false) : undefined}>
                                     Click Me!
