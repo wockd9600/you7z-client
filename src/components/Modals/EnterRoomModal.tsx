@@ -35,7 +35,7 @@ const EnterRoomModal = ({ isOpen, onClose }: SetNameModalProps) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>
             <div className={styles.divStyle}>
-                <input type="text" ref={roomCodeRef} className={styles.inputStyle} onKeyDown={handleKeyDown} placeholder="입장 코드" />
+                <input type="number" ref={roomCodeRef} className={styles.inputStyle} onKeyDown={handleKeyDown} placeholder="입장 코드" />
                 <button type="button" className={styles.buttonStyle} onClick={enterRoom}>
                     입장
                 </button>

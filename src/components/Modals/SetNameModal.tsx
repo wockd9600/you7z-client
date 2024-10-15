@@ -67,12 +67,12 @@ const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
                 <button type="button" className={styles.buttonStyle} onClick={handleSetName}>
                     변경
                 </button>
-                {isMessage && (
-                    <p className={styles.messageStyle} style={{ color: isMessageValue === "변경 완료" ? "#009000" : "#FF0000" }}>
-                        {isMessageValue}
-                    </p>
-                )}
             </div>
+            {isMessage && (
+                <p className={styles.messageStyle} style={{ color: isMessageValue === "변경 완료" ? "#009000" : "#FF0000" }}>
+                    {isMessageValue}
+                </p>
+            )}
         </Modal>
     );
 };

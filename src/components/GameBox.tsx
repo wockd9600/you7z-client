@@ -329,11 +329,11 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     };
 
     const playSong = () => {
-        // focusInput();
+        focusInput();
         SocketService.socketEmit("play song");
     };
     const passSong = () => {
-        // focusInput();
+        focusInput();
         SocketService.socketEmit("pass song");
     };
 
