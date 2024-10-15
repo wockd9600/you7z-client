@@ -20,6 +20,7 @@ import { GameStatus } from "constants/enums";
 import Timer from "./Timer";
 
 interface GameBoxProps {
+    inputRef: MutableRefObject<HTMLInputElement | null>;
     playerRef1: MutableRefObject<YouTubePlayer | null>;
     playerRef2: MutableRefObject<YouTubePlayer | null>;
     playerRef3: MutableRefObject<YouTubePlayer | null>;
@@ -32,7 +33,7 @@ interface YouTubePlayer {
     getPlayerState: () => number;
 }
 
-const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
+const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
     const usersRef = useRef<GameUser[]>([]);
     const songIndexRef = useRef<Number>(0);
     // const playerRef1 = useRef<YouTubePlayer | null>(null);
@@ -240,10 +241,15 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
             setScoreBoardModalOpen(true);
             dispatch(setStatus(0));
             setIsTimer(false);
+            playerRef1.current = null;
+            playerRef2.current = null;
         }, 5000);
     };
 
     const handlePlaySong = (possibleAudioPlayer = true) => {
+        localStorage.setItem("GameStatus", GameStatus.IS_GAMING.toString());
+        if (inputRef && inputRef.current) inputRef.current.focus();
+
         setIsTimer(false);
         setTimeout(() => setIsTimer(true), 100);
         setIsSpeakerIcon(true);
@@ -303,7 +309,6 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
 
         setTimeout(() => {
             dispatch(setGameSongIndex());
-            localStorage.setItem("GameStatus", GameStatus.IS_GAMING.toString());
         }, 100);
 
         usersRef.current.forEach((user) => {
@@ -319,8 +324,15 @@ const GameBox = ({ playerRef1, playerRef2, playerRef3 }: GameBoxProps) => {
         setIsNextSongButtonDisable(false);
     };
 
-    const playSong = () => SocketService.socketEmit("play song");
-    const passSong = () => SocketService.socketEmit("pass song");
+    const playSong = () => {
+        if (inputRef && inputRef.current) inputRef.current.focus();
+        setIsNextSongButton(false); 
+        SocketService.socketEmit("play song");
+    };
+    const passSong = () => {
+        if (inputRef && inputRef.current) inputRef.current.focus();
+        SocketService.socketEmit("pass song");
+    };
 
     return (
         <section>

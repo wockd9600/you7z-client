@@ -44,6 +44,7 @@ const Game = () => {
     const playerRef1 = useRef<YouTubePlayer | null>(null);
     const playerRef2 = useRef<YouTubePlayer | null>(null);
     const playerRef3 = useRef<YouTubePlayer | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const songIndexRef = useRef<Number>(0);
 
     const { userId } = useSelector((state: RootState) => state.user);
@@ -202,9 +203,9 @@ const Game = () => {
     return (
         <section style={gameContainer}>
             <GameHeader />
-            <GameBox playerRef1={playerRef1} playerRef2={playerRef2} playerRef3={playerRef3} />
+            <GameBox inputRef={inputRef} playerRef1={playerRef1} playerRef2={playerRef2} playerRef3={playerRef3} />
             <AnswerBox />
-            <AnswerInput />
+            <AnswerInput inputRef={inputRef} />
         </section>
     );
 };
