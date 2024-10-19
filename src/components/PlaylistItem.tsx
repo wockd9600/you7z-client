@@ -1,35 +1,18 @@
-import { useState } from "react";
+import React from "react";
 import styles from "./Modals/css/BoardTypeModal.module.css";
 
-import { PlaylistModalType } from "constants/enums";
 import { Playlist } from "types";
+import { PlaylistModalType } from "constants/enums";
 
 interface PlaylistItemProps {
-    item: Playlist,
-    type: number;
+    item: Playlist;
     rank: number;
-    storePlaylist: (id: number) => void;
-    cancelStorePlaylist: (id: number) => void;
+    onClose: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
+    modalType: number;
 }
 
-const PlaylistItem = ({ item, rank, type, storePlaylist, cancelStorePlaylist }: PlaylistItemProps) => {
-    const { id, title, score, length } = item;
-
-    const [count, setCount] = useState(score);
-    const [stored, setStored] = useState(item.downloaded ? item.downloaded : false);
-
-    // '담기' 버튼 클릭 시 실행되는 함수
-    const handleSave = () => {
-        setCount(count + 1);
-        setStored(true);
-    };
-
-    const clickButtonStore = async () => {
-        await storePlaylist(id);
-        handleSave();
-    };
-
-    const clickButtonCancelStore = () => cancelStorePlaylist(id);
+const PlaylistItem = ({ item, rank, onClose, modalType }: PlaylistItemProps) => {
+    const { title, length } = item;
 
     return (
         <ul className={styles.row}>
@@ -37,12 +20,11 @@ const PlaylistItem = ({ item, rank, type, storePlaylist, cancelStorePlaylist }: 
             <li className={`${styles.title} ellipsis`}>{title}</li>
             <li className={styles.download}>{length}</li>
             {/* <li className={styles.download}>{count}</li> */}
-            {type === PlaylistModalType.POPULAR && <li>{stored ? <button disabled>담음</button> : <button onClick={clickButtonStore}>담기</button>}</li>}
-            {type === PlaylistModalType.MY && (
+            {modalType === PlaylistModalType.POPULAR && 
                 <li>
-                    <button onClick={clickButtonCancelStore}>취소</button>
+                    <button onClick={onClose}>선택</button>
                 </li>
-            )}
+            }
         </ul>
     );
 };

@@ -20,10 +20,16 @@ export interface GameAnswer {
 }
 
 export interface GameSetting {
-    playlist: string;
+    playlist_id: number;
+    title: string;
     description: string;
     // gameType: number;
     targetScore: number;
+}
+
+export interface TempGameSetting {
+    playlist_id: number;
+    title: string;
 }
 
 // GameState 타입 정의
@@ -32,6 +38,7 @@ export interface GameState {
     roomCode: string;
     managerId: number;
     gameSetting: GameSetting;
+    tempGameSetting: TempGameSetting;
     users: GameUser[];
     answers: GameAnswer[];
 }
@@ -41,7 +48,8 @@ const initialState: GameState = {
     status: -1,
     roomCode: "",
     managerId: -1,
-    gameSetting: { playlist: "", description: "", /* gameType: 0, */ targetScore: 0 },
+    gameSetting: { playlist_id: -1, title: "", description: "", targetScore: 0 },
+    tempGameSetting: { playlist_id: -1, title: "" },
     users: [],
     answers: [],
 };
@@ -59,17 +67,17 @@ export const gameSlice = createSlice({
         setManagerId: (state, action: PayloadAction<number>) => {
             state.managerId = action.payload;
         },
-        setPlaylist: (state, action: PayloadAction<string>) => {
-            state.gameSetting.playlist = action.payload;
+        setPlaylistTitle: (state, action: PayloadAction<string>) => {
+            state.gameSetting.title = action.payload;
         },
         setDescription: (state, action: PayloadAction<string>) => {
             state.gameSetting.description = action.payload;
         },
-        // setGameType: (state, action: PayloadAction<number>) => {
-        //     state.gameSetting.gameType = action.payload;
-        // },
         setTargetScore: (state, action: PayloadAction<number>) => {
             state.gameSetting.targetScore = action.payload;
+        },
+        setTempGameSetting: (state, action: PayloadAction<TempGameSetting>) => {
+            state.tempGameSetting = action.payload;
         },
         setAnswers: (state, action: PayloadAction<GameAnswer[]>) => {
             state.answers = action.payload;
@@ -111,6 +119,6 @@ export const gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatus, setRoomCode, setManagerId, setPlaylist, setDescription, /* setGameType, */ setTargetScore, setAnswers, addUser, updateUserInfo, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
+export const { setStatus, setRoomCode, setManagerId, setPlaylistTitle, setDescription, setTargetScore, setTempGameSetting, setAnswers, addUser, updateUserInfo, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
 
 export default gameSlice.reducer;

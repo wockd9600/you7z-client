@@ -20,7 +20,7 @@ const GameDescriptionModal = ({ isOpen, onClose }: GameDescriptionModalProps) =>
             <div className={styles.container}>
                 <article className={styles.table} style={{ width: "100%" }}>
                     <h1 style={{ fontSize: 16, marginBottom: 15 }}>게임 설명</h1>
-                    <h2>{gameSetting.playlist}</h2>
+                    <h2>{gameSetting.title}</h2>
                     {gameSetting.description}
                 </article>
             </div>

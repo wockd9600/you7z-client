@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from "react";
+import { CSSProperties, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Icon from "./Icon";
@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { DropdownOption, PlaylistModalType } from "constants/enums";
 import PlaylistModal from "./Modals/PlaylistModal";
 
-const liName = ["이름변경", "내 노래모음", "만든 노래모음", "로그아웃"];
+const liName = ["이름변경", "만든 노래모음", "로그아웃"];
 
 const Dropdown = () => {
     const dropdownContainer: CSSProperties = {
@@ -24,7 +24,7 @@ const Dropdown = () => {
         justifyContent: "right",
     };
 
-    const options: number[] = Array(4)
+    const options: number[] = Array(3)
         .fill(0)
         .map((_, i) => i);
 
@@ -49,10 +49,6 @@ const Dropdown = () => {
         switch (option) {
             case DropdownOption.SET_NAME:
                 setSetNameModalOpen(true);
-                break;
-            case DropdownOption.MY_PLAYLIST:
-                setModalType(PlaylistModalType.MY);
-                setPlaylistModalOpen(true);
                 break;
             case DropdownOption.CREATE_PLAYLIST:
                 setModalType(PlaylistModalType.CREATED);

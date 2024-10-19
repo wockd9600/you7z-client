@@ -15,17 +15,9 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
-    const { playlists, getPlaylists, setPlaylists, storePlaylist, cancelStorePlaylist } = usePlaylist();
+    const { playlists, getPlaylists } = usePlaylist();
 
     const [page, setPage] = useState(1);
-    // playlists.push({ id: 1, title: "2024 노래 모음", score: 8, description: "", downloaded: false });
-    // playlists.push({ id: 2, title: "추억의 애니 노래", score: 1, description: "", downloaded: true });
-    // playlists.push({ id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", score: 4, description: "", downloaded: false });
-    // playlists.push({ id: 4, title: "최악의 노래 모음", score: 4, description: "", downloaded: false });
-    // playlists.push({ id: 1, title: "2024 노래 모음", score: 8, description: "", downloaded: false });
-    // playlists.push({ id: 2, title: "추억의 애니 노래", score: 1, description: "", downloaded: true });
-    // playlists.push({ id: 3, title: "몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라몰라", score: 4, description: "", downloaded: false });
-    // playlists.push({ id: 4, title: "최악의 노래 모음", score: 4, description: "", downloaded: false });
     // playlists.push({ id: 1, title: "2024 노래 모음", score: 8, description: "", downloaded: false });
     // playlists.push({ id: 2, title: "추억의 애니 노래", score: 1, description: "", downloaded: true });
 
@@ -38,27 +30,16 @@ const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
 
     const searchPlaylist = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            console.log("Input value:", value);
-            setPlaylists([]);
+            getPlaylists(page, modalType, value);
             setTimeout(() => {
                 setValue("");
             }, 0);
         }
     };
 
-    const nextPage = () => {
-        changePage(page + 1);
-        console.log("nextPage");
-    };
-
-    const previousPage = () => {
-        changePage(page - 1);
-    };
-
-    const changePage = (page: number) => {
-        // *server
-        setPage(page);
-    };
+    const nextPage = () => changePage(page + 1);
+    const previousPage = () => changePage(page - 1);
+    const changePage = (page: number) => setPage(page);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -71,11 +52,11 @@ const PlaylistModal = ({ isOpen, onClose, modalType }: SetNameModalProps) => {
                         <li className={styles.download}>곡</li>
                         {/* <li className={styles.download}>점수</li> */}
                     </ul>
-                    {playlists && playlists.map((item, index) => <PlaylistItem key={index} rank={index} type={modalType} item={item} storePlaylist={storePlaylist} cancelStorePlaylist={cancelStorePlaylist} />)}
+                    {playlists && playlists.map((item, index) => <PlaylistItem key={index} rank={index} item={item} modalType={modalType} onClose={onClose} />)}
                 </article>
                 <article className={styles.pageButton}>
-                    <PageButton direction="&lt;" onClick={previousPage} />
-                    <PageButton direction="&gt;" onClick={nextPage} />
+                    {page !== 1 && <PageButton direction="&lt;" onClick={previousPage} />}
+                    {playlists.length === 8 && <PageButton direction="&gt;" onClick={nextPage} />}
                 </article>
             </div>
         </Modal>

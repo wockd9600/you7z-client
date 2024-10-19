@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
-import { setPlaylist, /* setGameType, */ setTargetScore, GameAnswer, addAnswerMessage } from "../redux/gameSlice";
+import { setPlaylistTitle, /* setGameType, */ setTargetScore, GameAnswer, addAnswerMessage } from "../redux/gameSlice";
 
 import SocketService from "../utils/socket";
 
@@ -18,14 +18,14 @@ const SettingsPanel = () => {
     const { userId } = useSelector((state: RootState) => state.user);
     const { roomCode, managerId, users, gameSetting } = useSelector((state: RootState) => state.game);
     const isManager = managerId === userId;
-
+    
     useEffect(() => {
         if (!roomCode) return;
 
-        const handleChangeGameSetting = (data: { playlist: string; /* gameType: number; */ targetScore: number; answer: GameAnswer }) => {
-            const { playlist, /* gameType, */ targetScore, answer } = data;
+        const handleChangeGameSetting = (data: { title: string; /* gameType: number; */ targetScore: number; answer: GameAnswer }) => {
+            const { title, /* gameType, */ targetScore, answer } = data;
 
-            if (playlist) dispatch(setPlaylist(playlist));
+            if (title) dispatch(setPlaylistTitle(title));
             // if (gameType) dispatch(setGameType(gameType));
             if (targetScore) dispatch(setTargetScore(targetScore));
 
@@ -57,7 +57,7 @@ const SettingsPanel = () => {
     return (
         <article className={styles.settingsPanelContainer}>
             <ul className={`${styles.setingBox} ${isManager && styles.setingBoxManager}`} onClick={clickButton}>
-                <li>{gameSetting.playlist}</li>
+                <li>{gameSetting.title}</li>
                 {/* <li>
                     듣기시간 : <span>{gameSetting.gameType ? "전부 듣기" : "1초 듣기"}</span>
                 </li> */}
@@ -68,7 +68,7 @@ const SettingsPanel = () => {
 
             {isManager && <Button text="게임시작" style={{ width: "100%", height: "40px" }} onClick={handleClickGameStart} />}
 
-            <article style={{ zIndex: 1 }}>{isManager && isSettingBoxModalOpen && <SettingBoxModal isOpen={isSettingBoxModalOpen} onClose={closeSettingBoxModal} />}</article>
+            <article style={{ zIndex: 2 }}>{isManager && isSettingBoxModalOpen && <SettingBoxModal isOpen={isSettingBoxModalOpen} onClose={closeSettingBoxModal} />}</article>
         </article>
     );
 };

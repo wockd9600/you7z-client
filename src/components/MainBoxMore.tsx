@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreatePlayListButton, PlayListButton } from "components/Buttons/index";
+import { CreatePlayListButton } from "components/Buttons/index";
 
 const MainBoxMore = () => {
     const [isMore, setIsMore] = useState(false);
@@ -13,7 +13,7 @@ const MainBoxMore = () => {
             {isMore ? (
                 <div className="more">
                     <CreatePlayListButton />
-                    <PlayListButton />
+                    {/* <PlayListButton /> */}
                 </div>
             ) : (
                 <p style={{ marginTop: "8px", cursor: "pointer" }} onClick={toggleMore}>

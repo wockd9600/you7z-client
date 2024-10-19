@@ -1,15 +1,15 @@
 export enum DropdownOption {
     SET_NAME,
-    MY_PLAYLIST,
+    // MY_PLAYLIST,
     CREATE_PLAYLIST,
     LOGOUT,
 }
 
 export enum PlaylistModalType {
     POPULAR,
-    MY,
+    // MY,
     CREATED,
-    MY_WITH_CREATED,
+    // MY_WITH_CREATED,
 }
 
 export enum GameStatus {
