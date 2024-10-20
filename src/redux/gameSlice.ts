@@ -67,14 +67,8 @@ export const gameSlice = createSlice({
         setManagerId: (state, action: PayloadAction<number>) => {
             state.managerId = action.payload;
         },
-        setPlaylistTitle: (state, action: PayloadAction<string>) => {
-            state.gameSetting.title = action.payload;
-        },
-        setDescription: (state, action: PayloadAction<string>) => {
-            state.gameSetting.description = action.payload;
-        },
-        setTargetScore: (state, action: PayloadAction<number>) => {
-            state.gameSetting.targetScore = action.payload;
+        setGameSetting: (state, action: PayloadAction<GameSetting>) => {
+            state.gameSetting = action.payload
         },
         setTempGameSetting: (state, action: PayloadAction<TempGameSetting>) => {
             state.tempGameSetting = action.payload;
@@ -119,6 +113,6 @@ export const gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatus, setRoomCode, setManagerId, setPlaylistTitle, setDescription, setTargetScore, setTempGameSetting, setAnswers, addUser, updateUserInfo, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
+export const { setStatus, setRoomCode, setManagerId, setGameSetting, setTempGameSetting, setAnswers, addUser, updateUserInfo, removeUser, addAnswerMessage, setGameState, resetGameState } = gameSlice.actions;
 
 export default gameSlice.reducer;

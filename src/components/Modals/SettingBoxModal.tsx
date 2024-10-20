@@ -18,7 +18,7 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 
 const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const [targetScore, setTargetScore] = useState<number>(255);
-    const { tempGameSetting } = useSelector((state: RootState) => state.game);
+    const { gameSetting, tempGameSetting } = useSelector((state: RootState) => state.game);
     const handleTargetScoreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setTargetScore(Number(event.target.value));
     };
@@ -26,6 +26,7 @@ const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const changeRoomSetting = () => {
         // if (![0, 1].includes(gameType)) return;
         if (![5, 10, 15, 20, 255].includes(targetScore)) return;
+        if (gameSetting.playlist_id === tempGameSetting.playlist_id && gameSetting.targetScore === targetScore) return onClose();
 
         const data = {
             playlistId: tempGameSetting.playlist_id,

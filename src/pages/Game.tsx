@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
 import { logout as logoutRedux } from "../redux/userSlice";
-import { setStatus, setManagerId, addAnswerMessage, addUser, GameAnswer, setDescription, setAnswers, GameUser, resetGameState, removeUser } from "../redux/gameSlice";
+import { setStatus, setManagerId, addAnswerMessage, addUser, GameAnswer, setAnswers, GameUser, resetGameState, removeUser } from "../redux/gameSlice";
 
 import { setGameSong } from "../redux/songSlice";
 
@@ -78,14 +78,11 @@ const Game = () => {
             if (nextManagerId) dispatch(setManagerId(nextManagerId));
         };
 
-        const handleJoinUser = (user: GameUser) => {
-            if (user.userId !== userId) {
-                const answer = { id: 0, isAlert: true, userId: 0, message: `${user.nickname}님이 입장했습니다.` };
-                dispatch(addUser({ ...user, isReady: true }));
+        const handleJoinUser = (userData: GameUser) => {
+            if (userData.userId !== userId) {
+                const answer = { id: 0, isAlert: true, userId: 0, message: `${userData.nickname}님이 입장했습니다.` };
+                dispatch(addUser({ ...userData, isReady: true }));
                 dispatch(addAnswerMessage(answer));
-            } else {
-                // const answer = { id: 0, isAlert: true, userId: 0, message: `방에 입장했습니다.` };
-                // dispatch(addAnswerMessage(answer));
             }
         };
 
@@ -103,7 +100,7 @@ const Game = () => {
                     { id: 0, isAlert: true, userId: 0, message: `${discription || ""}` },
                 ];
 
-                dispatch(setDescription(discription));
+                // dispatch(setDescription(discription));
                 dispatch(setAnswers(answer));
                 dispatch(setStatus(1));
 

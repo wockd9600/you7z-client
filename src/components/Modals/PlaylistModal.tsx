@@ -10,7 +10,7 @@ import styles from "./css/BoardTypeModal.module.css";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
-    onClose: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
+    onClose: () => void;
     modalType: number;
 }
 

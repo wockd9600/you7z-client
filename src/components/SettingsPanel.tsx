@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "redux/store";
-import { setPlaylistTitle, /* setGameType, */ setTargetScore, GameAnswer, addAnswerMessage } from "../redux/gameSlice";
+import { setGameSetting, GameAnswer, addAnswerMessage } from "../redux/gameSlice";
 
 import SocketService from "../utils/socket";
 
@@ -18,17 +18,21 @@ const SettingsPanel = () => {
     const { userId } = useSelector((state: RootState) => state.user);
     const { roomCode, managerId, users, gameSetting } = useSelector((state: RootState) => state.game);
     const isManager = managerId === userId;
-    
+
     useEffect(() => {
         if (!roomCode) return;
 
-        const handleChangeGameSetting = (data: { title: string; /* gameType: number; */ targetScore: number; answer: GameAnswer }) => {
-            const { title, /* gameType, */ targetScore, answer } = data;
+        const handleChangeGameSetting = (data: { playlist_id: number; title: string; /* gameType: number; */ targetScore: number; answer: GameAnswer }) => {
+            const { playlist_id, title, targetScore, answer } = data;
+            
+            const newGameSetting = {
+                ...gameSetting,
+                playlist_id,
+                title,
+                targetScore,
+            };
 
-            if (title) dispatch(setPlaylistTitle(title));
-            // if (gameType) dispatch(setGameType(gameType));
-            if (targetScore) dispatch(setTargetScore(targetScore));
-
+            dispatch(setGameSetting(newGameSetting))
             dispatch(addAnswerMessage(answer));
             closeSettingBoxModal();
         };

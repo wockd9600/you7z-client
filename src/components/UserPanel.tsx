@@ -22,9 +22,8 @@ const UserPanel = () => {
 
         const socket = SocketService.getInstance(roomCode);
 
-        const handleUserKick = (data: { kickedUserId: number; answer: GameAnswer }) => {
-            const { kickedUserId, answer } = data;
-
+        const handleUserKick = (answer: GameAnswer) => {
+            const kickedUserId = answer.userId;
             if (userId === kickedUserId) {
                 alert("강퇴되었습니다.");
                 dispatch(resetGameState());
