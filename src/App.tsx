@@ -13,6 +13,13 @@ function App() {
     const dispatch = useDispatch();
 
     const isLogin = useSelector((state: RootState) => state.user.isLogin);
+    let vh = 0;
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+    });
 
     useEffect(() => {
         // Fetch tokens from localStorage
