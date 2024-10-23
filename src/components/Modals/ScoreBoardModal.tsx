@@ -4,6 +4,7 @@ import { RootState } from "redux/store";
 
 import Modal from "../Common/Modal";
 import styles from "./css/BoardTypeModal.module.css";
+import Button from "components/Common/Button";
 
 interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isOpen: boolean;
@@ -14,7 +15,7 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 const ScoreBoardModal = ({ isOpen, onClose }: SetNameModalProps) => {
     const { users } = useSelector((state: RootState) => state.game);
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} isOverlayDismissible={false}>
             <div className={styles.container}>
                 <article className={styles.table} style={{ width: "100%" }}>
                     <h1 style={{ fontSize: 16, marginBottom: 15 }}>점수판</h1>
@@ -30,6 +31,7 @@ const ScoreBoardModal = ({ isOpen, onClose }: SetNameModalProps) => {
                             </ul>
                         ))}
                 </article>
+                <Button text="확인" onClick={onClose} style={{width: "150px", height: "40px", marginTop: "10px"}}></Button>
             </div>
         </Modal>
     );

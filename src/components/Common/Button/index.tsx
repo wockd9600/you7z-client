@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./button.module.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    text: string;
+    text: string | any;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
     style?: React.CSSProperties;
     disabled?: boolean;

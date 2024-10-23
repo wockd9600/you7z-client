@@ -40,6 +40,7 @@ const AnswerBox = () => {
             if (answerResponseData) dispatch(addAnswerMessage(answerResponseData));
             if (answerSongResponseData) {
                 const answer = { id: 0, isAlert: true, userId: 0, message: `정답은 &_C${answerSongResponseData.answer}&_C 입니다.` };
+                
                 dispatch(addAnswerMessage(answer));
                 if (answerSongResponseData.description && answerSongResponseData.description.length !== 0) {
                     const description = { id: 0, isAlert: true, userId: 0, message: `${answerSongResponseData.description}` };

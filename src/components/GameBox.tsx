@@ -41,6 +41,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     // const playerRef3 = useRef<YouTubePlayer | null>(null);
 
     const [isMobile, setIsMobile] = useState(false);
+    const [isThrottled, setIsThrottled] = useState(false);
 
     const [isScoreBoardModalOpen, setScoreBoardModalOpen] = useState(false);
     const [newUsers, setNewUsers] = useState<{ user_id: number }[]>([]);
@@ -51,12 +52,28 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     const [isNextSongButtonDisable, setIsNextSongButtonDisable] = useState(false);
     const [isSpeakerIcon, setIsSpeakerIcon] = useState(false);
     const [isTimer, setIsTimer] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     const dispatch = useDispatch();
 
     const { userId } = useSelector((state: RootState) => state.user);
     const { roomCode, status, users } = useSelector((state: RootState) => state.game);
     const { song1, song2, songIndex } = useSelector((state: RootState) => state.song);
+
+    const activeUsers = users.filter((user) => user.status === 1).length;
+    const totalUsers = users.filter((user) => user.status !== -1).length;
+
+    // 값이 변경되면 애니메이션 트리거
+    useEffect(() => {
+        if (activeUsers === 0) return;
+        
+        setIsAnimating(true);
+        const timer = setTimeout(() => {
+            setIsAnimating(false); // 일정 시간 후 애니메이션 종료
+        }, 400); // 500ms 후 원래 상태로 돌아감
+
+        return () => clearTimeout(timer);
+    }, [activeUsers]); // activeUsers 값이 바뀔 때마다 실행
 
     useEffect(() => {
         const checkDevice = () => {
@@ -250,10 +267,11 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
         localStorage.setItem("GameStatus", GameStatus.IS_GAMING.toString());
         // focusInput();
 
+        if (isThrottled) return;
+
         setIsNextSongButton(false);
         setIsTimer(false);
         setTimeout(() => setIsTimer(true), 100);
-        setIsSpeakerIcon(true);
 
         // 모바일은 자동재생이 안된다.
         // 자동재생이고(클릭x) 모바일이면 => 재생 버튼을 생성한다.
@@ -263,6 +281,13 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
             setIsPlaySongButton(true);
             return;
         }
+
+        setIsThrottled(true);
+        setTimeout(() => {
+            setIsThrottled(false);
+        }, 800);
+
+        setIsSpeakerIcon(true);
 
         if (songIndexRef.current === 0) {
             if (playerRef2.current) playerRef2.current.stopVideo();
@@ -382,7 +407,19 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
                                 </div>
                             )}
                             {!isNextSongButton && !isPlaySongButton && isPassSongButton && (
-                                <Button text={`넘기기 ${users.filter((user) => user.status === 1).length}/${users.filter((user) => user.status !== -1).length}`} onClick={passSong} style={{ width: "100%", height: "40px" }} disabled={isNextSongButtonDisable} />
+                                <Button
+                                    text={
+                                        <>
+                                            넘기기{" "}
+                                            <span style={{ display: "inline-block" }}>
+                                                <span className={isAnimating ? "animate-text" : ""}>{activeUsers}</span>/{totalUsers}
+                                            </span>
+                                        </>
+                                    }
+                                    onClick={passSong}
+                                    style={{ width: "100%", height: "40px" }}
+                                    disabled={isNextSongButtonDisable}
+                                />
                             )}
                             {isNextSongButton && <Button text="넘기기" onClick={playSong} style={{ width: "100%", height: "40px" }} />}
                         </div>

@@ -62,6 +62,7 @@ class SocketService {
     private static registerEvents(socket: Socket) {
         socket.on("connect", () => {
             this.state = SocketState.CONNECT;
+            this.socketEmit("change user status");
             // console.log("Socket connected");
         });
 

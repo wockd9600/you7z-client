@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 
@@ -47,17 +47,24 @@ const AnswerList = () => {
                     {enrichedAnswers &&
                         enrichedAnswers.map((item, index) => {
                             return item.isAlert ? (
-                                <p key={index} className={`${styles.answer} alert-color`}>
-                                    {item.message.split(/(&_C[^&_C]+&_C)/).map((part, i) =>
-                                        part.startsWith("&_C") && part.endsWith("&_C") ? (
-                                            <span key={i} style={{ color: "#79EDFF", fontWeight: "bold" }}>
-                                                {part.replace(/&_C/g, "")}
-                                            </span>
-                                        ) : (
-                                            part
-                                        )
-                                    )}
-                                </p>
+                                <div key={index} className={`${styles.answer} alert-color`}>
+                                    <div key={index} className={`${styles.answer} alert-color`}>
+                                        {item.message.split("\n").map((line, lineIndex) => (
+                                            <React.Fragment key={lineIndex}>
+                                                {line.split(/(&_C[^]+?_C)/).map((part, i) =>
+                                                    part.startsWith("&_C") && part.endsWith("&_C") ? (
+                                                        <span key={i} style={{ color: "#79EDFF", fontWeight: "bold" }}>
+                                                            {part.replace(/&_C/g, "")}
+                                                        </span>
+                                                    ) : (
+                                                        part
+                                                    )
+                                                )}
+                                                <br /> {/* 각 줄의 끝에 줄 바꿈 추가 */}
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+                                </div>
                             ) : (
                                 <p key={index} className={styles.answer}>
                                     <span className={`${styles.answerName} user-color${item.index}`}>{item.nickname}: </span>

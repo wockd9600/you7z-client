@@ -74,7 +74,6 @@ const Game = () => {
             const { leaveUserId, answer, nextManagerId } = data;
             dispatch(addAnswerMessage(answer));
             dispatch(removeUser(leaveUserId));
-            console.log(nextManagerId);
             if (nextManagerId) dispatch(setManagerId(nextManagerId));
         };
 
@@ -93,11 +92,11 @@ const Game = () => {
 
             if (gmaeSongData) dispatch(setGameSong(gmaeSongData));
             if (gmaePlaylistData) {
-                const { title, discription } = gmaePlaylistData;
+                const { title, description } = gmaePlaylistData;
                 const answer = [
                     { id: 0, isAlert: true, userId: 0, message: `게임 시작!!!` },
                     { id: 0, isAlert: true, userId: 0, message: `${title}` },
-                    { id: 0, isAlert: true, userId: 0, message: `${discription || ""}` },
+                    { id: 0, isAlert: true, userId: 0, message: `${description || ""}` },
                 ];
 
                 // dispatch(setDescription(discription));
@@ -138,8 +137,6 @@ const Game = () => {
         socket.on("leave game", handleLeaveGame);
         socket.on("game start", handleGamerStart);
         socket.on("token expired", handleTokenExpried);
-
-        SocketService.socketEmit("change user status");
 
         return () => {
             socket.off("join user");
