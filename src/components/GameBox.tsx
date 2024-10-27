@@ -51,8 +51,10 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     const [isNextSongButton, setIsNextSongButton] = useState(false);
     const [isNextSongButtonDisable, setIsNextSongButtonDisable] = useState(false);
     const [isSpeakerIcon, setIsSpeakerIcon] = useState(false);
-    const [isTimer, setIsTimer] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
+
+    const [isTimer, setIsTimer] = useState(false);
+    const [time, setTime] = useState(59);
 
     const dispatch = useDispatch();
 
@@ -66,7 +68,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     // 값이 변경되면 애니메이션 트리거
     useEffect(() => {
         if (activeUsers === 0) return;
-        
+
         setIsAnimating(true);
         const timer = setTimeout(() => {
             setIsAnimating(false); // 일정 시간 후 애니메이션 종료
@@ -216,6 +218,9 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
 
     const handleAllPassSong = () => {
         setIsPassSongButton(false);
+        setIsTimer(false);
+        setTime(5);
+        setTimeout(() => setIsTimer(true), 100);
     };
 
     const handleNextSong = (song: GameSong, notAgreeUserId?: number[]) => {
@@ -225,6 +230,16 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
             });
 
             if (!notAgreeUserId.includes(userId)) return;
+        }
+
+        const sessionGameStatusString = localStorage.getItem("GameStatus");
+        if (sessionGameStatusString) {
+            const sessionGameStatus = parseInt(sessionGameStatusString);
+            if (sessionGameStatus === GameStatus.IS_GAMING) {
+                setIsTimer(false);
+                setTime(5);
+                setTimeout(() => setIsTimer(true), 100);
+            }
         }
 
         setIsPassSongButton(false);
@@ -271,6 +286,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
 
         setIsNextSongButton(false);
         setIsTimer(false);
+        setTime(59);
         setTimeout(() => setIsTimer(true), 100);
 
         // 모바일은 자동재생이 안된다.
@@ -366,7 +382,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
         <section>
             <article className={styles.container}>
                 <UserPanel />
-                {isTimer && <Timer isMobile={isMobile || false} />}
+                {isTimer && <Timer time={time} isMobile={isMobile || false} />}
                 {status === GameStatus.NOT_STARTED && <SettingsPanel />}{" "}
                 {status === GameStatus.STARTED && (
                     <article className={`${styles.settingsPanelContainer} ${styles.musicContainer}`}>
