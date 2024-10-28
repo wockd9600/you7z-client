@@ -19,13 +19,13 @@ const Login = () => {
     };
 
     const text: CSSProperties = {
-        marginTop: "34px",
+        marginBottom: "5px",
         fontSize: "18px",
     };
 
     const smallText: CSSProperties = {
-        marginTop: "34px",
-        fontSize: "16px",
+        marginBottom: "34px",
+        fontSize: "12px",
     };
 
     useEffect(() => {
@@ -88,7 +88,7 @@ const Login = () => {
     // const a = () => {
     //     alert("d")
     // }
-    
+
     // window.addEventListener("blur", () => a);
     // window.addEventListener("focus", () => a);
 
@@ -96,11 +96,12 @@ const Login = () => {
         <div>
             <div style={layout}>
                 {/* {y} */}
-                <KakaoButton />
+                <h1 style={{ marginBottom: "20px" }}>노래 맞추기 게임 베타버전</h1>
                 <p style={text}>해당 홈페이지는 개인 정보를 저장하지 않습니다.</p>
                 <div style={smallText}>
                     <p>PC와 크롬에서 더 쾌적하게 할 수 있습니다.</p>
                 </div>
+                <KakaoButton />
             </div>
         </div>
     );
