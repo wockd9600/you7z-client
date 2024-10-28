@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 
@@ -17,11 +17,16 @@ interface SetNameModalProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
-    const [targetScore, setTargetScore] = useState<number>(255);
+    const [targetScore, setTargetScore] = useState<number>(15);
     const { gameSetting, tempGameSetting } = useSelector((state: RootState) => state.game);
     const handleTargetScoreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setTargetScore(Number(event.target.value));
     };
+
+    useEffect(() => {
+        setTargetScore(gameSetting.targetScore)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const changeRoomSetting = () => {
         // if (![0, 1].includes(gameType)) return;

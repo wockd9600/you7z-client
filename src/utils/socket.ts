@@ -71,6 +71,11 @@ class SocketService {
             // console.log("Socket disconnected");
         });
 
+        socket.on("error", (data) => {
+            const { message } = data;
+            alert(message);
+        });
+
         // socket.onAny((eventName, ...args) => {
         // console.log(`Received event: ${eventName}`, args);
         // 여기서 모든 이벤트를 처리할 수 있습니다.
