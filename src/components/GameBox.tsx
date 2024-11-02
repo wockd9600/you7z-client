@@ -223,7 +223,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
         setTimeout(() => setIsTimer(true), 100);
     };
 
-    const handleNextSong = (song: GameSong, notAgreeUserId?: number[]) => {
+    const handleNextSong = ({ gmaeSongData, notAgreeUserId, resetTimer = true }: { gmaeSongData: GameSong; notAgreeUserId?: number[]; resetTimer?: boolean }) => {
         if (notAgreeUserId && Array.isArray(notAgreeUserId)) {
             notAgreeUserId.forEach((readyUserId) => {
                 dispatch(updateUserInfo({ userId: readyUserId, isReady: false }));
@@ -232,18 +232,14 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
             if (!notAgreeUserId.includes(userId)) return;
         }
 
-        const sessionGameStatusString = localStorage.getItem("GameStatus");
-        if (sessionGameStatusString) {
-            const sessionGameStatus = parseInt(sessionGameStatusString);
-            if (sessionGameStatus === GameStatus.IS_GAMING) {
-                setIsTimer(false);
-                setTime(5);
-                setTimeout(() => setIsTimer(true), 100);
-            }
+        if (resetTimer) {
+            setIsTimer(false);
+            setTime(5);
+            setTimeout(() => setIsTimer(true), 100);
         }
 
         setIsPassSongButton(false);
-        dispatch(setGameSong(song));
+        dispatch(setGameSong(gmaeSongData));
     };
 
     const handleReadySong = (readyUserId: number) => {
