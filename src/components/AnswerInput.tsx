@@ -77,7 +77,7 @@ const AnswerInput = ({ inputRef }: AnswerInputProps) => {
                 onCompositionEnd={handleCompositionEnd} // IME 입력 완료 이벤트
                 autoComplete="off"
             />
-            <Button text="전송" style={{ width: "80px", height: "100%" }} onClick={handleAnswerSubmit} />
+            <Button text="전송" className="MobileTextSize" style={{ width: "80px", height: "100%" }} onClick={handleAnswerSubmit} />
         </article>
     );
 };

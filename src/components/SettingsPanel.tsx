@@ -70,7 +70,7 @@ const SettingsPanel = () => {
                 </li>
             </ul>
 
-            {isManager && <Button text="게임시작" style={{ width: "100%", height: "40px", backgroundColor: "#A1E3A1" }} onClick={handleClickGameStart} />}
+            {isManager && <Button text="게임시작" className="MobileTextSize" style={{ width: "100%", height: "40px", backgroundColor: "#A1E3A1" }} onClick={handleClickGameStart} />}
 
             <article style={{ zIndex: 2 }}>{isManager && isSettingBoxModalOpen && <SettingBoxModal isOpen={isSettingBoxModalOpen} onClose={closeSettingBoxModal} />}</article>
         </article>

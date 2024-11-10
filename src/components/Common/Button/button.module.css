@@ -10,3 +10,7 @@
 .buttonHover:hover {
     transform: scale(1.1);
 }
+
+.MobileTextSize {
+    font-size: 22px;
+}
