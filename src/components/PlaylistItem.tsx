@@ -33,7 +33,7 @@ const PlaylistItem = ({ item, rank, onClose, modalType }: PlaylistItemProps) => 
             {/* <li className={styles.download}>{count}</li> */}
             {modalType === PlaylistModalType.POPULAR && (
                 <li>
-                    <button>선택</button>
+                    <button className={styles.mobileTextSize}>선택</button>
                 </li>
             )}
         </ul>

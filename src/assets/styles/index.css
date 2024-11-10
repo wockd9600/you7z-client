@@ -67,6 +67,7 @@ button {
     cursor: pointer;
     background-color: #F0C987;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 1px 6px;
 }
 
 button:disabled {

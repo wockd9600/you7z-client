@@ -117,3 +117,12 @@
     height: fit-content;
     font-size: 20px;
 }
+
+.mobileTextSize{}
+
+
+@media (max-width: 576px) {
+    .mobileTextSize {
+        font-size: 20px;
+    }
+}
