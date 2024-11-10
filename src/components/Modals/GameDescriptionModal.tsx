@@ -18,7 +18,7 @@ const GameDescriptionModal = ({ isOpen, onClose }: GameDescriptionModalProps) =>
     return (
         <Modal isOpen={isOpen} zIndex={10} onClose={onClose}>
             <div className={styles.container}>
-                <article className={styles.table} style={{ width: "100%" }}>
+                <article className={styles.table} style={{ width: "100%", fontSize: 16 }}>
                     <h1 style={{ fontSize: 16, marginBottom: 15 }}>게임 설명</h1>
                     <h2>{gameSetting.title}</h2>
                     {gameSetting.description}

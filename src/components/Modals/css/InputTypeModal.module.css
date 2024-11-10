@@ -1,22 +1,20 @@
 .divStyle {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    height: 36px;
 }
 
 .inputStyle {
-    width: 200px;
-    height: 30px;
-    margin-right: 10px;
+    width: 250px;
+    height: 50px;
     padding-left: 8px;
-    font-size: 16px;
 }
 
 .buttonStyle {
-    width: 60px;
+    width: 100px;
+    height: 45px;
+    margin-top: 10px;
     padding: 0;
-    height: 100%;
-    font-size: 16px;
     box-sizing: border-box;
 }
 

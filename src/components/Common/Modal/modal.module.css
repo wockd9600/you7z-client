@@ -20,10 +20,10 @@
 }
 
 .modalContent {
-    background: white;
+    background: #F5F3E7;
     padding: 20px;
-    padding-top: 50px;
-    border-radius: 5px;
+    padding-top: 55px;
+    border-radius: 8px;
     position: relative;
     text-align: start;
     max-height: 80%;
@@ -34,8 +34,8 @@
     position: absolute;
     top: 10px;
     left: 20px;
+    padding: 0 7px;
     /* background: none; */
     /* border: none; */
-    font-size: 20px;
     /* cursor: pointer; */
 }

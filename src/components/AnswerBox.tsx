@@ -22,6 +22,8 @@ const AnswerBox = () => {
         position: "relative",
         width: "100%",
         height: "100%",
+        fontSize: "16px",
+        fontFamily: "sans-serif",
         flex: 1,
         overflow: "auto",
     };

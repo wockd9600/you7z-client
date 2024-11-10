@@ -28,7 +28,7 @@ const PlayListButton = () => {
 
     return (
         <article>
-            <Button text={tempGameSetting.title || ""} onClick={clickButton} style={{ width: "100%", height: "40px", marginBottom: "16px", paddingLeft: "8px", fontSize: "16px", boxSizing: "border-box", textAlign: "start", backgroundColor: "#fff" }}></Button>
+            <Button text={tempGameSetting.title || ""} onClick={clickButton} style={{ width: "100%", height: "56px", marginBottom: "16px", paddingLeft: "8px", fontSize: "25px", boxSizing: "border-box", textAlign: "start", backgroundColor: "#fff" }}></Button>
 
             <article>{isPlaylistModalOpen && <PlaylistModal isOpen={isPlaylistModalOpen} onClose={closeSetNameModal} modalType={PlaylistModalType.POPULAR} />}</article>
         </article>

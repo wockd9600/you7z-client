@@ -15,7 +15,7 @@ const CreateRoomButton = () => {
 
     return (
         <article>
-            <Button text="노래모음 만들기" onClick={clickButton} style={{ marginBottom: "16px" }} />
+            <Button text={"노래모음\n만들기"} className="buttonHover" onClick={clickButton} style={{ marginBottom: "16px", whiteSpace: "pre-line", height: "110px", fontSize: "39px" }} />
             <article>{isInputCodeModalOpen && <CreatePlaylistModal isOpen={isInputCodeModalOpen} onClose={closeSetNameModal} />}</article>
         </article>
     );

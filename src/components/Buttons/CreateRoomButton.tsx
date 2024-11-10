@@ -7,7 +7,7 @@ const CreateRoomButton = () => {
 
     const clickButton = () => createGameRoom();
 
-    return <Button text="방만들기" onClick={clickButton} style={{ marginBottom: "16px" }} />;
+    return <Button text="방만들기" className="buttonHover" onClick={clickButton} style={{ marginBottom: "16px", fontSize: "39px" }} />;
 };
 
 export default CreateRoomButton;

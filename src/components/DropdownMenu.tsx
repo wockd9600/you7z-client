@@ -5,10 +5,10 @@ import Icon from "./Icon";
 import SetNameModal from "./Modals/SetNameModal";
 
 import { useAuth } from "../hooks/useAuth";
-import { DropdownOption, PlaylistModalType } from "constants/enums";
-import PlaylistModal from "./Modals/PlaylistModal";
+import { DropdownOption, /*PlaylistModalType*/ } from "constants/enums";
+// import PlaylistModal from "./Modals/PlaylistModal";
 
-const liName = ["이름변경", "만든 노래모음", "로그아웃"];
+const liName = ["이름변경", "만든 게임", "로그아웃"];
 
 const Dropdown = () => {
     const dropdownContainer: CSSProperties = {
@@ -34,15 +34,15 @@ const Dropdown = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isSetNameModalOpen, setSetNameModalOpen] = useState(false);
 
-    const [playlistModalType, setModalType] = useState(0);
-    const [isPlaylistModalOpen, setPlaylistModalOpen] = useState(false);
+    // const [playlistModalType, setModalType] = useState(0);
+    // const [isPlaylistModalOpen, setPlaylistModalOpen] = useState(false);
 
     const toggleDropdown = (): void => {
         setIsOpen(!isOpen);
     };
 
     const closeSetNameModal = () => setSetNameModalOpen(false);
-    const closePlaylistModal = () => setPlaylistModalOpen(false);
+    // const closePlaylistModal = () => setPlaylistModalOpen(false);
 
     //* 내가 만든 플레이리스트, 내다 담은 플레이리스트 보기
     const handleOptionClick = (option: DropdownOption): void => {
@@ -51,8 +51,9 @@ const Dropdown = () => {
                 setSetNameModalOpen(true);
                 break;
             case DropdownOption.CREATE_PLAYLIST:
-                setModalType(PlaylistModalType.CREATED);
-                setPlaylistModalOpen(true);
+                alert("미구현")
+                // setModalType(PlaylistModalType.CREATED);
+                // setPlaylistModalOpen(true);
                 break;
             case DropdownOption.LOGOUT:
                 logout();
@@ -79,8 +80,8 @@ const Dropdown = () => {
                             style={{
                                 position: "absolute",
                                 top: "100%",
-                                left: 0,
-                                width: "150px",
+                                right: 0,
+                                width: "200px",
                                 padding: 0,
                                 margin: 0,
                                 listStyleType: "none",
@@ -90,7 +91,7 @@ const Dropdown = () => {
                             }}
                         >
                             {options.map((option, index) => (
-                                <li key={index} style={{ padding: "10px", cursor: "pointer" }} onClick={() => handleOptionClick(option)}>
+                                <li className="hover11" key={index} style={{ padding: "10px", cursor: "pointer" }} onClick={() => handleOptionClick(option)}>
                                     {liName[option]}
                                 </li>
                             ))}
@@ -98,7 +99,7 @@ const Dropdown = () => {
                     </article>
                 )}
                 <article>{isSetNameModalOpen && <SetNameModal isOpen={isSetNameModalOpen} onClose={closeSetNameModal} />}</article>
-                <article>{isPlaylistModalOpen && <PlaylistModal isOpen={isPlaylistModalOpen} onClose={closePlaylistModal} modalType={playlistModalType} />}</article>
+                {/* <article>{isPlaylistModalOpen && <PlaylistModal isOpen={isPlaylistModalOpen} onClose={closePlaylistModal} modalType={playlistModalType} />}</article> */}
             </div>
         </article>
     );
