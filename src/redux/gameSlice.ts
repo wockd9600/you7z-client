@@ -45,10 +45,10 @@ export interface GameState {
 
 // Initial state for the game
 const initialState: GameState = {
-    status: -1,
+    status: 0,
     roomCode: "",
     managerId: -1,
-    gameSetting: { playlist_id: -1, title: "", description: "", targetScore: 0 },
+    gameSetting: { playlist_id: -1, title: "", description: "", targetScore: 15 },
     tempGameSetting: { playlist_id: -1, title: "" },
     users: [],
     answers: [],

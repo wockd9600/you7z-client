@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(231, 231, 231);
+    background-color: #F5F3E7;
 }
 
 .AppContainer {
@@ -14,7 +14,6 @@
     height: 100%;
     max-width: 1024px;
     max-height: 768px;
-    background-color: white;
 }
 
 .App-logo {
@@ -36,7 +35,6 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
 }
 
 .App-link {

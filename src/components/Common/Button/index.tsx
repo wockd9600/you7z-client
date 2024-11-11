@@ -10,7 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({ className, text, onClick, style, disabled }: ButtonProps) => {
     return (
-        <button className={styles.button} style={style} onClick={onClick} disabled={disabled}>
+        <button className={`${styles.button} ${className ? styles[className] : ''}`} style={style} onClick={onClick} disabled={disabled}>
             {text}
         </button>
     );

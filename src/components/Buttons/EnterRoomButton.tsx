@@ -14,7 +14,7 @@ const EnterRoomButton = () => {
 
     return (
         <article>
-            <Button text="코드입력" onClick={clickButton} style={{ marginBottom: "16px" }} />
+            <Button text="코드입력" className="buttonHover" onClick={clickButton} style={{ marginBottom: "16px", fontSize: "39px" }} />
             <article>{isEnterRoomModalOpen && <EnterRoomModal isOpen={isEnterRoomModalOpen} onClose={closeSetNameModal} />}</article>
         </article>
     );

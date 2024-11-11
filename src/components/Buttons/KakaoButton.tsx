@@ -1,8 +1,11 @@
+import Button from "components/Common/Button";
+
 function KakaoButton() {
     const button = {
-        height: "48px",
+        width: "260px",
+        height: "80px",
         padding: "0 20px",
-        fontSize: "18px",
+        fontSize: "39px",
     };
 
     const kakaoLogin = function () {
@@ -13,11 +16,7 @@ function KakaoButton() {
         window.location.href = kakaoURL;
     };
 
-    return (
-        <button type="button" style={button} onClick={kakaoLogin}>
-            카카오 로그인
-        </button>
-    );
+    return <Button text="카카오 로그인" className="buttonHover" onClick={kakaoLogin} style={button} />;
 }
 
 export default KakaoButton;

@@ -57,7 +57,7 @@ const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
                     </select> */}
 
                     <label htmlFor="goal">목표 점수</label>
-                    <select className={styles.inputStyle} style={{ borderRadius: "0", border: "1px solid #000" }} value={targetScore} onChange={handleTargetScoreChange} id="goal">
+                    <select className={styles.inputStyle} value={targetScore} onChange={handleTargetScoreChange} id="goal">
                         <option value={5}>5</option>
                         <option value={10}>10</option>
                         <option value={15}>15</option>
@@ -66,7 +66,7 @@ const SettingBoxModal = ({ isOpen, onClose }: SetNameModalProps) => {
                     </select>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Button text="완료" onClick={changeRoomSetting} />
+                    <Button text="완료" style={{width: "180px", height: "60px"}} onClick={changeRoomSetting} />
                 </div>
             </div>
         </Modal>

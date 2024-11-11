@@ -64,15 +64,15 @@ const SetNameModal = ({ isOpen, onClose }: SetNameModalProps) => {
         <Modal isOpen={isOpen} onClose={onClose} isFull={false}>
             <div className={styles.divStyle}>
                 <input type="text" className={styles.inputStyle} ref={inputRef} onKeyDown={handleKeyDown} placeholder={name} />
+                {isMessage && (
+                    <p className={styles.messageStyle} style={{ color: isMessageValue === "변경 완료" ? "#009000" : "#FF0000" }}>
+                        {isMessageValue}
+                    </p>
+                )}
                 <button type="button" className={styles.buttonStyle} onClick={handleSetName}>
                     변경
                 </button>
             </div>
-            {isMessage && (
-                <p className={styles.messageStyle} style={{ color: isMessageValue === "변경 완료" ? "#009000" : "#FF0000" }}>
-                    {isMessageValue}
-                </p>
-            )}
         </Modal>
     );
 };

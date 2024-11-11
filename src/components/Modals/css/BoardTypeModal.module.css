@@ -35,12 +35,18 @@
 
 .inputStyle {
     width: 100%;
-    height: 40px;
+    height: 56px;
     margin-bottom: 16px;
     padding-left: 8px;
-    font-size: 16px;
+    font-size: 25px;
+    font-family: "BMEULJIROTTF", sans-serif;
+    color: #000;
+    border-radius: 8px;
+    border: 2px solid #000;
+    cursor: pointer;
     box-sizing: border-box;
 }
+
 
 .inputStyleTextCenter {
     text-align: center;
@@ -110,4 +116,13 @@
     width: fit-content;
     height: fit-content;
     font-size: 20px;
+}
+
+.mobileTextSize{}
+
+
+@media (max-width: 576px) {
+    .mobileTextSize {
+        font-size: 20px;
+    }
 }

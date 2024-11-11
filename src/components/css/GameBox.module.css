@@ -15,8 +15,9 @@
 
 .userRow {
     display: flex;
-    font-size: 14px;
     align-items: center;
+    font-size: 16px;
+    font-family: sans-serif;
 }
 
 .userRow > li + li {
@@ -45,12 +46,16 @@
 
 .setingBox {
     width: 100%;
+    min-height: 41px;
     height: fit-content;
     padding: 15px 0px;
     margin-bottom: 16px;
-    font-size: 14px;
+    font-size: 25px;
     border-radius: 8px;
-    background-color: #f0f0f0;
+    border: 2px solid #000;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #FFEFD5;
+    color: #6B4226;
 }
 
 .setingBoxManager {
@@ -157,3 +162,11 @@
     }
 }
 
+@media (max-width: 576px) {
+    .userRow {
+        font-size: 16px;
+    }
+    .setingBox {
+        font-size: 16px;
+    }
+}

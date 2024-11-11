@@ -65,18 +65,6 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     const activeUsers = users.filter((user) => user.status === 1).length;
     const totalUsers = users.filter((user) => user.status !== -1).length;
 
-    // 값이 변경되면 애니메이션 트리거
-    useEffect(() => {
-        if (activeUsers === 0) return;
-
-        setIsAnimating(true);
-        const timer = setTimeout(() => {
-            setIsAnimating(false); // 일정 시간 후 애니메이션 종료
-        }, 400); // 500ms 후 원래 상태로 돌아감
-
-        return () => clearTimeout(timer);
-    }, [activeUsers]); // activeUsers 값이 바뀔 때마다 실행
-
     useEffect(() => {
         const checkDevice = () => {
             const userAgent = navigator.userAgent.toLowerCase();
@@ -212,7 +200,15 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     const handlePassSong = (passUserId: number) => {
         if (userId === passUserId) {
             setIsNextSongButtonDisable(true);
+            setIsAnimating(false);
+        } else {
+            setIsAnimating(true);
+             // 일정 시간 후 애니메이션 종료
+            setTimeout(() => {
+                setIsAnimating(false);
+            }, 500);
         }
+        
         dispatch(updateUserInfo({ userId: passUserId, status: 1 }));
     };
 
@@ -263,6 +259,10 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     const handleGameFinish = (finishResponseData: any) => {
         const { newUsers, managerId } = finishResponseData;
         localStorage.setItem("GameStatus", GameStatus.NOT_STARTED.toString());
+
+        const temp = document.getElementsByClassName("AppContainer") as unknown as HTMLElement[];
+        if (temp.length !== 0) temp[0].focus();
+
         setTimeout(() => {
             if (managerId) dispatch(setManagerId(managerId));
             if (newUsers) setNewUsers(newUsers);
@@ -429,7 +429,7 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
                                         </>
                                     }
                                     onClick={passSong}
-                                    style={{ width: "100%", height: "40px" }}
+                                    style={{ width: "100%", height: "40px", fontSize: `${isMobile ? "16px" : "25px"}` }}
                                     disabled={isNextSongButtonDisable}
                                 />
                             )}
