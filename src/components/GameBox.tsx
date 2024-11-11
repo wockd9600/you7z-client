@@ -125,6 +125,9 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
             socket.off("all ready song");
             socket.off("play song");
             socket.off("game finish");
+            playerRef1.current = null;
+            playerRef2.current = null;
+            playerRef3.current = null;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomCode]);
@@ -203,12 +206,12 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
             setIsAnimating(false);
         } else {
             setIsAnimating(true);
-             // 일정 시간 후 애니메이션 종료
+            // 일정 시간 후 애니메이션 종료
             setTimeout(() => {
                 setIsAnimating(false);
             }, 500);
         }
-        
+
         dispatch(updateUserInfo({ userId: passUserId, status: 1 }));
     };
 
@@ -219,23 +222,23 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
         setTimeout(() => setIsTimer(true), 100);
     };
 
-    const handleNextSong = ({ gmaeSongData, notAgreeUserId, resetTimer = true }: { gmaeSongData: GameSong; notAgreeUserId?: number[]; resetTimer?: boolean }) => {
-        if (notAgreeUserId && Array.isArray(notAgreeUserId)) {
-            notAgreeUserId.forEach((readyUserId) => {
-                dispatch(updateUserInfo({ userId: readyUserId, isReady: false }));
+    const handleNextSong = ({ gmaeSongData, disagreeUsers, resetTimer = true }: { gmaeSongData: GameSong; disagreeUsers?: number[]; resetTimer?: boolean }) => {
+        if (disagreeUsers && Array.isArray(disagreeUsers)) {
+            disagreeUsers.forEach((agreeUserId) => {
+                dispatch(updateUserInfo({ userId: agreeUserId, isReady: false }));
             });
 
-            if (!notAgreeUserId.includes(userId)) return;
+            if (!disagreeUsers.includes(userId)) return;
         }
+
+        setIsPassSongButton(false);
 
         if (resetTimer) {
             setIsTimer(false);
             setTime(5);
             setTimeout(() => setIsTimer(true), 100);
         }
-
-        setIsPassSongButton(false);
-        dispatch(setGameSong(gmaeSongData));
+        if (gmaeSongData) dispatch(setGameSong(gmaeSongData));
     };
 
     const handleReadySong = (readyUserId: number) => {
@@ -259,7 +262,8 @@ const GameBox = ({ inputRef, playerRef1, playerRef2, playerRef3 }: GameBoxProps)
     const handleGameFinish = (finishResponseData: any) => {
         const { newUsers, managerId } = finishResponseData;
         localStorage.setItem("GameStatus", GameStatus.NOT_STARTED.toString());
-
+        setIsPassSongButton(false);
+        
         const temp = document.getElementsByClassName("AppContainer") as unknown as HTMLElement[];
         if (temp.length !== 0) temp[0].focus();
 
