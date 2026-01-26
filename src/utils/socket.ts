@@ -47,7 +47,16 @@ class SocketService {
     public static socketEmit(name: string, data?: any) {
         if (this.instance) {
             const token = localStorage.getItem("access_token");
-            this.instance.emit(name, { token, data });
+            this.instance.emit(name, { token, data }, (response: { status: number; message: string }) => {
+                if (response?.status === 419) {
+                    console.error("Token expired. Requesting refresh token...");
+                    // Refresh token logic here
+                } else if (response?.status) {
+                    console.error(`Error: ${response.message}`);
+                } else {
+                    console.log("Response:", response);
+                }
+            });
         }
     }
 
